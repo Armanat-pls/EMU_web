@@ -1,0 +1,66 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: sans-serif;
+	font-size: 18px;
+	width: 100%;
+	height: 100%;
+	min-height: 100vh;
+	background-color: rgb(225, 190, 224);
+}
+
+.content-zone{
+	display: grid;
+	grid-template-columns: 50% 50%;
+	gap: 1rem;
+}
+
+.left-side{
+	display: grid;
+	grid-template-rows: auto auto auto;
+	gap: 1rem;
+
+}
+.right-side{
+	display: grid;
+	grid-template-rows: auto auto auto;
+	gap: 1rem;
+}
+
+.container-cnt_reg{
+	display: grid;
+	grid-template-columns: 50% 50%;
+	grid-template-rows: 50% 50%;
+	gap: 1rem;
+}
+.container-controls{
+	
+}
+
+.container-CANT_select{
+	display: inline-grid;
+	grid-template-rows: 50% 50%;
+	gap: 1rem;
+}
+
+.container-input-inner{
+	display: grid;
+	grid-template-columns: 40% 60%;
+	gap: 1rem;
+}
+
+.container-input-zone-data{
+	display: grid;
+	grid-template-columns: 70% 30%;
+	gap: 1rem;
+}
+
+.container-output-inner{
+	display: grid;
+	grid-template-rows: auto auto auto;
+	gap: 1rem;
+}
