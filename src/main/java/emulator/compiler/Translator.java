@@ -7,7 +7,7 @@ import static emulator.compiler.parts.enums.*;
 import static emulator.CMS.*;
 import emulator.compiler.parts.*;
 import static emulator.compiler.parts.compilerUtils.*;
-import static emulator.Logic.*;
+import static emulator.EMU.*;
 import java.io.IOException;
 
 public class Translator{

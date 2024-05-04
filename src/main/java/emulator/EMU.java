@@ -5,11 +5,15 @@ import emulator.core.*;
 import static emulator.core.Config.*;
 import static emulator.CMS.*;
 
-public class Logic{
+public class EMU{
 
 	public BRAIN ALU = new BRAIN();
 	public MEMORY RAM = new MEMORY();
 	public CONTROL UU = new CONTROL();
+
+	public EMU(){
+		if (CMSmap == null) initialiseCMS();
+	}
 
 	// перевод двоичной в десятичную целое
 	public static int bit_to_int(BitSet data) 
@@ -137,6 +141,41 @@ public class Logic{
 		if (sign_neagative) imp *= -1.0; //сделать отрицательным при необходимости
 
 		return imp;
+	}
+
+	public static BitSet string_to_bit(String line)
+	{
+		BitSet cell = new BitSet(CELL);
+		line = line.replace(" ", "");
+		if (line.length() < CELL) //удлиннение строки при необходимости
+		{
+			String temp = "";
+			for (int i = 0; i < CELL - line.length(); i++)
+				temp += "0";
+			line = temp + line;
+		}
+		for (int i = 0; i < CELL; i++){
+			if (line.charAt(i) == '1')
+				cell.set(CELL - 1 - i);
+			else cell.clear(CELL - 1 - i);
+		}
+		return cell;
+	}
+
+	public static String bit_to_string(BitSet data)   //функция вывода набора битов в строку
+	{
+		String S = "";
+		if (data == null) return S;
+		for (int i = CELL - 1; i >= 0; i--)
+		{
+			if (i % 4 == 3)
+				S += " ";
+			if (data.get(i))
+				S += "1";
+			else
+				S += "0";
+		}
+		return S;
 	}
 
 	public static String makeIndex(int index, int zerosAmnt)
