@@ -5,9 +5,9 @@ import static emulator.core.Config.*;
 
 public class MEMORY{	//память
 
-	private BitSet[] TABLE; //массив ячеек памяти
+	private BitSet[] TABLE;
 
-	public MEMORY(){	//конструктор
+	public MEMORY(){
 		this.TABLE = new BitSet[MEM];
 		for (int i = 0; i < MEM; i++)
 			this.TABLE[i] = new BitSet(CELL);
