@@ -168,7 +168,7 @@ public class Translator{
 		if (errors.size() == 0){
 			try{
 				for (int i = 0; i < MEM; i++)
-					ib.writer.write(show_bitset(BitSets[i]) + "\n");
+					ib.writer.write(bit_to_string(BitSets[i]) + "\n");
 				ib.writer.close();
 			}
 			catch(IOException e){
