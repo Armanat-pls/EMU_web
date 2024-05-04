@@ -5,9 +5,9 @@ import static emulator.core.Config.*;
 
 public class BRAIN{ //АЛУ
 
-	private BitSet RO;	//Аккумулятор, на одну ячейку
+	private BitSet RO;	//Аккумулятор
 	
-	public BRAIN(){	//конструктор
+	public BRAIN(){
 		this.RO = new BitSet(CELL);
 	}
 
@@ -15,12 +15,8 @@ public class BRAIN{ //АЛУ
 		this.RO = (BitSet)data.clone();
 	}
 
-	public BitSet get_RO(){		//получение регистра
+	public BitSet get_RO(){
 		return (BitSet)this.RO.clone();
-	}
-
-	public String showRO(){		//вывод регистра
-		return show_bitset(this.RO);
 	}
 
 	public void clearRO(){
