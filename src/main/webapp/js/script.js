@@ -56,7 +56,6 @@ async function initiateMain(){
 		CELL: 0,
 		BMEM: 0,
 		VER: "",
-		SessionID: "",
 		ajaxURL: '/EMU/main',
 		maxDigits: 0,
 	}
@@ -75,7 +74,6 @@ function AJAXgetConfig(){
 			window["CONFIG"].CELL = data.CELL;
 			window["CONFIG"].BMEM = data.BMEM;
 			window["CONFIG"].VER = data.VER;
-			window["CONFIG"].SessionID = data.SessionID;
 			window["initDone"]();
 		},
 		error: function (error) {
@@ -213,38 +211,22 @@ function isNumeric(str) {
 }
 
 
-let examplesPOST = {
-	1: {
-		method: "SETCANT",
-		input: 1
-	},
-	2: {
-		method: "SETMEMCELL",
-		type: "raw",
-		input: "00000000000011111111110111001000",
-		mem_addr: 0,
-		register: false
-	},
-	3: {
-		method: "SETMEMCELL",
-		type: "com",
-		comm_c: 4098,
-		comm_addr: 200,
-		mem_addr: 0,
-		register: false
-	},
-	4: {
-		method: "SETMEMCELL",
-		type: "data",
-		data_type: "int",
-		input: 1048008,
-		register: false
-	},
-	5: {
-		methid: "EXECONE",
-	},
-	6: {
-		methid: "EXECALL",
-	}
-}
+function getState(){
+	$.ajax({
+		url: CONFIG.ajaxURL,
+		type: "GET",
+		data: {
+			method: "GETSTATE",
+		},
+		success: function (data) {			
+			console.log(data);
+			window["STATE"].CANT = data.CANT;
+			window["STATE"].ALU = data.RO;
+			window["STATE"].RAM = data.RAM;
 
+		},
+		error: function (error) {
+			console.log(`Error ${error}`);
+		}
+	});
+}
