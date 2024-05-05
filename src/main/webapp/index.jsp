@@ -8,10 +8,12 @@
 
 	<link rel="stylesheet" href="css/styles.css">
 	<script type="text/javascript" src="js/script.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 	<div class = "content-zone">
 		<div class = "left-side">
+			<div id="loading" style="display: block">ЗАГРУЗКА</div>
 			<div class = "container-COUNT container-cnt_reg">
 				<div>СЧАК</div>
 				<div>Ячейка на исполнение</div>
@@ -86,7 +88,7 @@
 							<input type="number" id = "input_ramwrite_comm_addr">
 							<label for="input-ramwrite-comm-c" style="display: block;">Команда; адрес операнда</label>
 						</div>
-						<div id = "input_zone_data"  style="display: none">
+						<div id = "input_zone_data" style="display: none">
 							<div class = "container-input-zone-data">
 								<div>
 									<input type="text" id = "input_ramwrite_data" style="display: block;">

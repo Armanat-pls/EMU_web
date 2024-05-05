@@ -1,5 +1,7 @@
-window.onload = function(){
-	initialization();
+window.onload = async function(){
+	await initiateMain();
+	await startLoading();
+
 	console.log("Ready");
 
 	//Сброс отображения окна ввода при перезагрузке
@@ -8,7 +10,26 @@ window.onload = function(){
 
 }
 
-function initialization(){
+function startLoading(){
+	window.isLoading = true;
+	document.getElementById("loading").style.display = "block";
+	console.log("Загрузка началась");
+
+}
+function endLoading(){
+	document.getElementById("loading").style.display = "none";
+	console.log("Загрузка завершена");
+	window.isLoading = false;
+}
+function configLoaded(){
+	initiateState();
+}
+
+async function initiateMain(){
+	window.isLoading = true;
+	window.waitStart = startLoading;
+	window.waitDone = endLoading;
+	window.initDone = configLoaded;
 	window.DOMS = {
 		textBox_CANT: document.getElementById("textBox_CANT"),
 		textBox_CURcell: document.getElementById("textBox_CURcell"),
@@ -33,24 +54,54 @@ function initialization(){
 		output_integer: document.getElementById("output_integer"),
 		output_float: document.getElementById("output_float"),
 	}
+	window.CONFIG = {
+		MEM: 0,
+		CELL: 0,
+		BMEM: 0,
+		VER: "",
+		SessionID: "",
+		ajaxURL: '/EMU/main',
+		maxDigits: 0,
+	}
+	AJAXgetConfig();
+}
 
+function AJAXgetConfig(){
+	$.ajax({
+		url: CONFIG.ajaxURL,
+		type: "GET",
+		data: {
+			method: "GETCONFIG",
+		},
+		success: function (data) {			
+			window["CONFIG"].MEM = data.MEM;
+			window["CONFIG"].CELL = data.CELL;
+			window["CONFIG"].BMEM = data.BMEM;
+			window["CONFIG"].VER = data.VER;
+			window["CONFIG"].SessionID = data.SessionID;
+			window["initDone"]();
+		},
+		error: function (error) {
+			console.log(`Error ${error}`);
+		}
+	});
+}
+
+async function initiateState(){
 	window.STATE = {
 		CHOSEN: 0,
 		CANT: 0,
 		ALU: "0000 0000 0000 0000 0000 0000 0000 0000",
-		MEM: 256,
-		maxDigits: 0,
 		RAM: [],
 	}
-	STATE.maxDigits = STATE.MEM.toString().length
-	RAM_choser.max = STATE.MEM - 1;
-
-	for (let i = 0; i < STATE.MEM; i++) {
+	CONFIG.maxDigits = CONFIG.MEM.toString().length
+	RAM_choser.max = CONFIG.MEM - 1;
+	for (let i = 0; i < CONFIG.MEM; i++) {
 		STATE.RAM.push(
 			{
 				clean: "0000 0000 0000 0000 0000 0000 0000 0000",
 				comm_c: 0,
-				comm_addr: i,
+				comm_addr: 0,
 				comm_char: "",
 				data_int: 0,
 				data_float: 0.0,
@@ -58,12 +109,13 @@ function initialization(){
 		);
 	}
 	refresh_UI();
+	endLoading();
 }
 
 function makeIndex(i){
 	let curDigits = i.toString().length;
 	let index = "[";
-	for (let j = 0; j < STATE.maxDigits - curDigits; j++) index += "0";
+	for (let j = 0; j < CONFIG.maxDigits - curDigits; j++) index += "0";
 	index += i.toString();
 	index += "] ";
 	return index;
@@ -98,7 +150,7 @@ function show_RAM(){
 	for (let i = 0; i < select_RAM_list.options.length; i++) {
 		select_RAM_list.remove(i);
 	}
-	for (let i = 0; i < STATE.MEM; i++) {
+	for (let i = 0; i < CONFIG.MEM; i++) {
 		let cell = document.createElement('option');
 		cell.value = i;
 		cell.innerHTML = makeIndex(i) + STATE.RAM[i].clean;
@@ -128,7 +180,7 @@ function validate_RAM_index(value){
 	value = Number(value);
 	if (!Number.isInteger(value)) return 0;
 	if (value < 0) return 0;
-	else if (value >= STATE.MEM) return STATE.MEM - 1;
+	else if (value >= CONFIG.MEM) return CONFIG.MEM - 1;
 	else return value;
 }
 
