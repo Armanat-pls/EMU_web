@@ -2,12 +2,9 @@ window.onload = async function(){
 	await initiateMain();
 	await startLoading();
 
-	console.log("Ready");
-
 	//Сброс отображения окна ввода при перезагрузке
 	set_radio_input_type("clean");
 	change_input_box();
-
 }
 
 function startLoading(){
@@ -214,3 +211,40 @@ function isNumeric(str) {
 	return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
 		   !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
 }
+
+
+let examplesPOST = {
+	1: {
+		method: "SETCANT",
+		input: 1
+	},
+	2: {
+		method: "SETMEMCELL",
+		type: "raw",
+		input: "00000000000011111111110111001000",
+		mem_addr: 0,
+		register: false
+	},
+	3: {
+		method: "SETMEMCELL",
+		type: "com",
+		comm_c: 4098,
+		comm_addr: 200,
+		mem_addr: 0,
+		register: false
+	},
+	4: {
+		method: "SETMEMCELL",
+		type: "data",
+		data_type: "int",
+		input: 1048008,
+		register: false
+	},
+	5: {
+		methid: "EXECONE",
+	},
+	6: {
+		methid: "EXECALL",
+	}
+}
+

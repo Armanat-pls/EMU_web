@@ -178,16 +178,6 @@ public class EMU{
 		return S;
 	}
 
-	public static String makeIndex(int index, int zerosAmnt)
-	{
-		String zeros = "[";
-		for (int i = 0; i < zerosAmnt; i++)
-			zeros += "0";
-		zeros += index + "]";
-		return zeros;
-	}
-
-
 	// склеивание двух int в двоичный код
 	public static BitSet make_one(int com, int addr)
 	{
