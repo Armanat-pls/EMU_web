@@ -45,11 +45,10 @@ public class EmulatorInterface {
 
 	public String getConfig(){
 		String s = "{";
-		s += makeJSONentry("MEM", ""+MEM);
-		s += makeJSONentry("CELL", ""+CELL);
-		s += makeJSONentry("BMEM", ""+BMEM);
-		s += makeJSONentry("VER", VER);
-		s += makeJSONentry("SessionID", request.getSession().getId(), true);
+		s += makeJSONentry("MEM", MEM, false);
+		s += makeJSONentry("CELL", CELL, false);
+		s += makeJSONentry("BMEM", BMEM, false);
+		s += makeJSONentry("VER", VER, true);
 		s += "}";
 		return s;
 	}
@@ -96,18 +95,18 @@ public class EmulatorInterface {
 	public String getMemAll(){
 		EMU emu = getEMU();
 		String s = "{";
-		s += makeJSONentry("CANT", "" + emu.UU.CANT);
-		s += makeJSONentry("RO", bit_to_string(emu.ALU.get_RO()));
+		s += makeJSONentry("CANT", emu.UU.CANT, false);
+		s += makeJSONentry("RO", bit_to_string(emu.ALU.get_RO()), false);
 		s += "\"RAM\": [";
 		for (int i = 0; i < MEM; i++){
 			s += "{";
 			emuMEMcellContainer cell = new emuMEMcellContainer(emu.RAM.get_cell(i));
-			s += makeJSONentry("clean", bit_to_string(cell.bits));
-			s += makeJSONentry("comm_c", ""+cell.commandCode);
-			s += makeJSONentry("comm_addr", ""+cell.commandAddr);
-			s += makeJSONentry("comm_char", cell.commandMnemonic);
-			s += makeJSONentry("data_int", ""+cell.intValue);
-			s += makeJSONentry("data_float", ""+cell.floatValue, true);
+			s += makeJSONentry("clean", bit_to_string(cell.bits), false);
+			s += makeJSONentry("comm_c", cell.commandCode, false);
+			s += makeJSONentry("comm_addr", cell.commandAddr, false);
+			s += makeJSONentry("comm_char", cell.commandMnemonic, false);
+			s += makeJSONentry("data_int", cell.intValue, false);
+			s += makeJSONentry("data_float", cell.floatValue, true);
 			s += "}";
 			if (i < MEM - 1) s += ",";
 		}
@@ -116,13 +115,28 @@ public class EmulatorInterface {
 		return s;
 	}
 
-	private String makeJSONentry(String key, String value){
-		String s = "\"" + key + "\":\"" + value + "\",";
+	public static String makeJSONentry(String key, int value, boolean last){
+		String s = "\"" + key + "\":" + value + "";
+		if (!last) s+=",";
 		return s;
 	}
 
-	private String makeJSONentry(String key, String value, boolean last){
+	public static String makeJSONentry(String key, float value, boolean last){
+		String s = "\"" + key + "\":" + value + "";
+		if (!last) s+=",";
+		return s;
+	}
+
+	public static String makeJSONentry(String key, String value, boolean last){
 		String s = "\"" + key + "\":\"" + value + "\"";
+		if (!last) s+=",";
+		return s;
+	}
+
+	public static String makeJSONone(String key, String value){
+		String s = "{";
+		s += makeJSONentry(key, value, true);
+		s += "}";
 		return s;
 	}
 }
