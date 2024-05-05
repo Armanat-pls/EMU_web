@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import emulator.EmulatorInterface;
-import static emulator.EmulatorInterface.*;
 
 @WebServlet(name = "api.Main", urlPatterns = "/main")
 public class Main extends HttpServlet {
@@ -26,9 +25,6 @@ public class Main extends HttpServlet {
 		switch (request.getParameter("method")) {
 			case "GETCONFIG":
 				json = api.getConfig();
-				break;
-			case "SESSION":
-				json = makeJSONone("sessionID", request.getSession().getId());
 				break;
 			case "GETSTATE":
 				json = api.getMemAll();
