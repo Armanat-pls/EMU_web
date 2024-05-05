@@ -112,10 +112,6 @@ public class EmulatorInterface {
 		return result;
 	}
 
-	public void test(){
-		
-	}
-
 	private String makeJSONentry(String key, String value){
 		String s = "\"" + key + "\":\"" + value + "\",";
 		return s;
