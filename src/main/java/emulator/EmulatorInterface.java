@@ -101,14 +101,28 @@ public class EmulatorInterface {
 	}
 
 	public String getConfig(){
-		int memorySize = MEM;
-		int cellSize = CELL;
-		int comAddrSize = BMEM;
-		String Version = VER;
-		return "config";
+
+		String result = "{";
+		result += makeJSONentry("MEM", ""+MEM);
+		result += makeJSONentry("CELL", ""+CELL);
+		result += makeJSONentry("BMEM", ""+BMEM);
+		result += makeJSONentry("VER", VER);
+		result += makeJSONentry("SessionID", request.getSession().getId(), true);
+		result += "}";
+		return result;
 	}
 
 	public void test(){
 		
+	}
+
+	private String makeJSONentry(String key, String value){
+		String s = "\"" + key + "\":\"" + value + "\",";
+		return s;
+	}
+
+	private String makeJSONentry(String key, String value, boolean last){
+		String s = "\"" + key + "\":\"" + value + "\"";
+		return s;
 	}
 }
