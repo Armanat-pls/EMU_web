@@ -43,6 +43,17 @@ public class EmulatorInterface {
 		request.getSession().setAttribute("emu", emu);
 	}
 
+	public String getConfig(){
+		String s = "{";
+		s += makeJSONentry("MEM", ""+MEM);
+		s += makeJSONentry("CELL", ""+CELL);
+		s += makeJSONentry("BMEM", ""+BMEM);
+		s += makeJSONentry("VER", VER);
+		s += makeJSONentry("SessionID", request.getSession().getId(), true);
+		s += "}";
+		return s;
+	}
+
 
 	public int getCANT()
 	{
@@ -84,32 +95,25 @@ public class EmulatorInterface {
 
 	public String getMemAll(){
 		EMU emu = getEMU();
-
-		int CANT = emu.UU.CANT;
-		String RO = bit_to_string(emu.ALU.get_RO());
-
-		emuMEMcellContainer[] MEMORY = new emuMEMcellContainer[MEM];
-		String s = "";
-		s += "СЧАК: " + CANT + "<br>";
-		s += "Регистр: " + RO + "<br>";
-		s += "Память: <br>";
+		String s = "{";
+		s += makeJSONentry("CANT", "" + emu.UU.CANT);
+		s += makeJSONentry("RO", bit_to_string(emu.ALU.get_RO()));
+		s += "\"RAM\": [";
 		for (int i = 0; i < MEM; i++){
-			MEMORY[i] = new emuMEMcellContainer(emu.RAM.get_cell(i));
-			s += i + " | " + MEMORY[i].toString() + "<br>";
+			s += "{";
+			emuMEMcellContainer cell = new emuMEMcellContainer(emu.RAM.get_cell(i));
+			s += makeJSONentry("clean", bit_to_string(cell.bits));
+			s += makeJSONentry("comm_c", ""+cell.commandCode);
+			s += makeJSONentry("comm_addr", ""+cell.commandAddr);
+			s += makeJSONentry("comm_char", cell.commandMnemonic);
+			s += makeJSONentry("data_int", ""+cell.intValue);
+			s += makeJSONentry("data_float", ""+cell.floatValue, true);
+			s += "}";
+			if (i < MEM - 1) s += ",";
 		}
+		s += "]";
+		s += "}";
 		return s;
-	}
-
-	public String getConfig(){
-
-		String result = "{";
-		result += makeJSONentry("MEM", ""+MEM);
-		result += makeJSONentry("CELL", ""+CELL);
-		result += makeJSONentry("BMEM", ""+BMEM);
-		result += makeJSONentry("VER", VER);
-		result += makeJSONentry("SessionID", request.getSession().getId(), true);
-		result += "}";
-		return result;
 	}
 
 	private String makeJSONentry(String key, String value){
