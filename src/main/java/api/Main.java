@@ -33,7 +33,7 @@ public class Main extends HttpServlet {
 				text = "nothing";
 				break;
 		}
-		response.setContentType("text/html");
+		response.setContentType("application/json");
 		PrintWriter printWriter = response.getWriter();
 		printWriter.write(text);
 		printWriter.close();
@@ -70,7 +70,7 @@ public class Main extends HttpServlet {
 				text = "nothing";
 				break;
 		}
-		response.setContentType("text/html");
+		response.setContentType("application/json");
 		PrintWriter printWriter = response.getWriter();
 		printWriter.write(text);
 		printWriter.close();
