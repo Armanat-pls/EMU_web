@@ -1,23 +1,22 @@
 package emulator;
 
+import static emulator.EMU.bit_to_string;
 import static emulator.EMU.string_to_bit;
 
 import java.util.BitSet;
 
+import static emulator.core.Config.*;
 import emulator.dataContainer.emuMEMcellContainer;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 public class EmulatorInterface {
 	private HttpServletRequest request;
-	public boolean started;
 
 	public EmulatorInterface(HttpServletRequest request){
 		this.request = request;
-		this.started = false;
-		if (request.getSession(false) == null){
+		if (request.getSession(false) == null || request.getSession().getAttribute("emu") == null){
 			initiateSession();
-			this.started = true;
 		}
 	}
 
@@ -66,6 +65,9 @@ public class EmulatorInterface {
 	public void setMemCellComm(int commandCode, int commandAddr){
 		
 	}
+	public void setMemCellComm(String commandMnemonic, int commandAddr){
+		
+	}
 	public void setMemCellData(int input){
 
 	}
@@ -78,5 +80,35 @@ public class EmulatorInterface {
 		BitSet memCell = emu.RAM.get_cell(addr);
 		emuMEMcellContainer cell = new emuMEMcellContainer(memCell);
 		return cell.toString();
+	}
+
+	public String getMemAll(){
+		EMU emu = getEMU();
+
+		int CANT = emu.UU.CANT;
+		String RO = bit_to_string(emu.ALU.get_RO());
+
+		emuMEMcellContainer[] MEMORY = new emuMEMcellContainer[MEM];
+		String s = "";
+		s += "СЧАК: " + CANT + "<br>";
+		s += "Регистр: " + RO + "<br>";
+		s += "Память: <br>";
+		for (int i = 0; i < MEM; i++){
+			MEMORY[i] = new emuMEMcellContainer(emu.RAM.get_cell(i));
+			s += i + " | " + MEMORY[i].toString() + "<br>";
+		}
+		return s;
+	}
+
+	public String getConfig(){
+		int memorySize = MEM;
+		int cellSize = CELL;
+		int comAddrSize = BMEM;
+		String Version = VER;
+		return "config";
+	}
+
+	public void test(){
+		
 	}
 }
