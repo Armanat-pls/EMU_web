@@ -168,7 +168,7 @@ public class EMU{
 		if (data == null) return S;
 		for (int i = CELL - 1; i >= 0; i--)
 		{
-			if (i % 4 == 3)
+			if ((i % 4 == 3) && (i != CELL - 1))
 				S += " ";
 			if (data.get(i))
 				S += "1";
