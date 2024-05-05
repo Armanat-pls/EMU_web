@@ -4,7 +4,6 @@ import java.util.BitSet;
 import static emulator.EMU.cut_com;
 import static emulator.EMU.bit_to_float;
 import static emulator.EMU.bit_to_int;
-import static emulator.EMU.bit_to_string;
 import static emulator.CMS.*;
 
 public class emuMEMcellContainer {
@@ -33,16 +32,5 @@ public class emuMEMcellContainer {
 
 		this.intValue = bit_to_int(this.bits);
 		this.floatValue = bit_to_float(this.bits);
-	}
-
-	public String toString(){
-		String s = "";
-		s += bit_to_string(bits) + " | ";
-		s += "[" + commandMnemonic + "] ";
-		s += commandCode + " - ";
-		s += commandAddr + " | ";
-		s += intValue + " | ";
-		s += floatValue + " | ";
-		return s;
 	}
 }
