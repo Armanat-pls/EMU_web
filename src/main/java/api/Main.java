@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import emulator.EmulatorInterface;
+import static emulator.EmulatorInterface.*;
 
 @WebServlet(name = "api.Main", urlPatterns = "/main")
 public class Main extends HttpServlet {
@@ -20,31 +21,26 @@ public class Main extends HttpServlet {
 		this.request=req;
 		this.response=res;
 		this.api = new EmulatorInterface(request);
-		String text;
+		String json;
 
 		switch (request.getParameter("method")) {
 			case "GETCONFIG":
-				text = requestConfig();
+				json = api.getConfig();
+				break;
+			case "SESSION":
+				json = makeJSONone("sessionID", request.getSession().getId());
 				break;
 			case "GETSTATE":
-				text = requestState();
+				json = api.getMemAll();
 				break;
 			default:
-				text = "nothing";
+				json = "";
 				break;
 		}
 		response.setContentType("application/json");
 		PrintWriter printWriter = response.getWriter();
-		printWriter.write(text);
+		printWriter.write(json);
 		printWriter.close();
-	}
-
-	private String requestConfig(){
-		return api.getConfig();
-	}
-
-	private String requestState(){
-		return api.getMemAll();
 	}
 
 	@Override
@@ -52,27 +48,29 @@ public class Main extends HttpServlet {
 		this.request=req;
 		this.response=res;
 		this.api = new EmulatorInterface(request);
-		String text;
+		String json;
+
 		switch (request.getParameter("method")) {
 			case "SETCANT":
-				text = "SETCANT";
+				json = "SETCANT";
 				break;
 			case "SETMEMCELL":
-				text = "SETMEMCELL";
+				json = "SETMEMCELL";
 				break;
 			case "EXECONE":
-				text = "EXECONE";
+				json = "EXECONE";
 				break;
 			case "EXECALL":
-				text = "EXECALL";
+				json = "EXECALL";
 				break;
 			default:
-				text = "nothing";
+				json = "nothing";
 				break;
 		}
+
 		response.setContentType("application/json");
 		PrintWriter printWriter = response.getWriter();
-		printWriter.write(text);
+		printWriter.write(json);
 		printWriter.close();
 	}
 }
