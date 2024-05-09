@@ -99,18 +99,20 @@ function AJAXgetConfig(){
 }
 
 async function initiateState(){
+	//TODO: инициализайия из запроса
 	window.STATE = {
 		CHOSEN: 0,
 		CANT: 0,
 		ALU: "0000 0000 0000 0000 0000 0000 0000 0000",
 		RAM: [],
 	}
-	CONFIG.maxDigits = CONFIG.MEM.toString().length
+	CONFIG.maxDigits = CONFIG.MEM.toString().length;
 	RAM_choser.max = CONFIG.MEM - 1;
-	DOM.input_textbox_comm_addr.max = CONFIG.MEM - 1;
+	DOMS.input_textbox_comm_addr.max = CONFIG.MEM - 1;
 	for (let i = 0; i < CONFIG.MEM; i++) {
 		STATE.RAM.push(
 			{
+				index: i,
 				clean: "0000 0000 0000 0000 0000 0000 0000 0000",
 				comm_c: 0,
 				comm_addr: 0,
@@ -175,9 +177,10 @@ function change_input_dataType(dataType){
 }
 
 function onclick_input_cell(){
-	let inputData = [];
-	inputData.push({type: INPUT_STATE.type});
-	inputData.push({chosen: STATE.CHOSEN});
+	let inputData = {};
+	inputData.type = INPUT_STATE.type;
+	inputData.chosen = STATE.CHOSEN;
+	inputData.toRO = INPUT_STATE.toALU;
 	switch (INPUT_STATE.type) {
 		case "clean":
 			let data = DOMS.input_textbox_clean.value;
@@ -189,24 +192,24 @@ function onclick_input_cell(){
 				alert("Посторонние символы в битовом наборе!");
 				return;
 			}
-			inputData.push({data: data});
+			inputData.data = data;
 			break;
 		case "comm":
-			inputData.push({comm_c: DOMS.input_textbox_comm_c.value});
+			inputData.comm_c = DOMS.input_textbox_comm_c.value;
 			let addr = validate_RAM_index_strict(DOMS.input_textbox_comm_addr.value);
 			if (addr === false){
 				alert("Адрес некорректен!");
 				return;
 			}
-			inputData.push({comm_addr: addr});
+			inputData.comm_addr = addr
 			break;
 		case "data":
-			inputData.push({dataType: INPUT_STATE.dataType});
+			inputData.dataType = INPUT_STATE.dataType
 			if (isNaN(DOMS.input_textbox_data.value)){
 				alert("Введено не число!");
 				return;
 			}
-			inputData.push({data: DOMS.input_textbox_data.value});
+			inputData.data = DOMS.input_textbox_data.value
 			break;
 		default:
 			return;
@@ -320,12 +323,12 @@ function getState(){
 }
 
 function sendInput(inputData){
-	inputData.push({method: "SETMEMCELL"});
+	inputData.method = "SETMEMCELL";
 	$.ajax({
 		url: CONFIG.ajaxURL,
 		type: "POST",
 		data: inputData,
-		success: function (data) {			
+		success: function (data) {
 			console.log(data);
 		},
 		error: function (error) {

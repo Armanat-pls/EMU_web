@@ -1,7 +1,6 @@
 package emulator;
 
-import static emulator.EMU.bit_to_string;
-import static emulator.EMU.string_to_bit;
+import static emulator.EMU.*;
 
 import java.util.BitSet;
 
@@ -66,30 +65,57 @@ public class EmulatorInterface {
 		setEMU(emu);
 	}
 
-	public void setMemCellRAW(int addr, String input){
+	public String setMemCellRAW(int addr, String input, boolean toALU){
 		EMU emu = getEMU();
 		BitSet tmp = string_to_bit(input);
-		emu.RAM.write_cell(addr, tmp);
+		if (toALU)
+			emu.ALU.write_RO(tmp);
+		else
+			emu.RAM.write_cell(addr, tmp);
 		setEMU(emu);
+		return getMemCell(addr, toALU);
 	}
-	public void setMemCellComm(int commandCode, int commandAddr){
-		
-	}
-	public void setMemCellComm(String commandMnemonic, int commandAddr){
-		
-	}
-	public void setMemCellData(int input){
-
-	}
-	public void setMemCellData(float input){
-		
-	}
-
-	public String getMemCell(int addr){
+	public String setMemCellComm(int addr, int commandCode, int commandAddr, boolean toALU){
 		EMU emu = getEMU();
-		BitSet memCell = emu.RAM.get_cell(addr);
+		BitSet tmp = make_one(commandCode, commandCode);
+		if (toALU)
+			emu.ALU.write_RO(tmp);
+		else
+			emu.RAM.write_cell(addr, tmp);
+		setEMU(emu);
+		return getMemCell(addr, toALU);
+	}
+
+	public String setMemCellData(int addr, int input, boolean toALU){
+		EMU emu = getEMU();
+		BitSet tmp = int_to_bit(input);
+		if (toALU)
+			emu.ALU.write_RO(tmp);
+		else
+			emu.RAM.write_cell(addr, tmp);
+		setEMU(emu);
+		return getMemCell(addr, toALU);
+	}
+	public String setMemCellData(int addr, float input, boolean toALU){
+		EMU emu = getEMU();
+		BitSet tmp = float_to_bit(input);
+		if (toALU)
+			emu.ALU.write_RO(tmp);
+		else
+			emu.RAM.write_cell(addr, tmp);
+		setEMU(emu);
+		return getMemCell(addr, toALU);
+	}
+
+	public String getMemCell(int addr, boolean fromRO){
+		EMU emu = getEMU();
+		BitSet memCell;
+		if (fromRO)
+			memCell = emu.ALU.get_RO();
+		else 
+			memCell = emu.RAM.get_cell(addr);
 		emuMEMcellContainer cell = new emuMEMcellContainer(memCell);
-		return cell.toString();
+		return memCellToJSON(cell, addr, fromRO);
 	}
 
 	public String getMemAll(){
@@ -99,15 +125,8 @@ public class EmulatorInterface {
 		s += makeJSONentry("RO", bit_to_string(emu.ALU.get_RO()), false);
 		s += "\"RAM\": [";
 		for (int i = 0; i < MEM; i++){
-			s += "{";
 			emuMEMcellContainer cell = new emuMEMcellContainer(emu.RAM.get_cell(i));
-			s += makeJSONentry("clean", bit_to_string(cell.bits), false);
-			s += makeJSONentry("comm_c", cell.commandCode, false);
-			s += makeJSONentry("comm_addr", cell.commandAddr, false);
-			s += makeJSONentry("comm_char", cell.commandMnemonic, false);
-			s += makeJSONentry("data_int", cell.intValue, false);
-			s += makeJSONentry("data_float", cell.floatValue, true);
-			s += "}";
+			s += memCellToJSON(cell, i, false);
 			if (i < MEM - 1) s += ",";
 		}
 		s += "]";
@@ -136,6 +155,22 @@ public class EmulatorInterface {
 	public static String makeJSONone(String key, String value){
 		String s = "{";
 		s += makeJSONentry(key, value, true);
+		s += "}";
+		return s;
+	}
+
+	private static String memCellToJSON(emuMEMcellContainer cell, int index, boolean RO){
+		String s = "{";
+		if (RO)
+			s += makeJSONentry("index", "RO", false);
+		else
+			s += makeJSONentry("index", index, false);
+		s += makeJSONentry("clean", bit_to_string(cell.bits), false);
+		s += makeJSONentry("comm_c", cell.commandCode, false);
+		s += makeJSONentry("comm_addr", cell.commandAddr, false);
+		s += makeJSONentry("comm_char", cell.commandMnemonic, false);
+		s += makeJSONentry("data_int", cell.intValue, false);
+		s += makeJSONentry("data_float", cell.floatValue, true);
 		s += "}";
 		return s;
 	}
