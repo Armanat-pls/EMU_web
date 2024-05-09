@@ -142,7 +142,12 @@ public class EmulatorInterface {
 	}
 
 	public static String makeJSONentry(String key, float value, boolean last){
-		String s = "\"" + key + "\":" + value + "";
+		String s = "";
+		if (Float.isFinite(value))
+			s += "\"" + key + "\":" + value + "";
+		else
+			s += "\"" + key + "\":\"" + value + "\"";
+		 
 		if (!last) s+=",";
 		return s;
 	}

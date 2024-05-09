@@ -20,7 +20,7 @@ function endLoading(){
 	window.isLoading = false;
 }
 function configLoaded(){
-	initiateState();
+	getState();
 }
 
 async function initiateMain(){
@@ -28,6 +28,8 @@ async function initiateMain(){
 	window.waitStart = startLoading;
 	window.waitDone = endLoading;
 	window.initDone = configLoaded;
+	window.stateDone = initiateState;
+	window.callRefresh = refresh_UI;
 	window.DOMS = {
 		textBox_CANT: document.getElementById("textBox_CANT"),
 		textBox_CURcell: document.getElementById("textBox_CURcell"),
@@ -98,30 +100,32 @@ function AJAXgetConfig(){
 	});
 }
 
-async function initiateState(){
-	//TODO: инициализайия из запроса
+function getState(){
+	$.ajax({
+		url: CONFIG.ajaxURL,
+		type: "GET",
+		data: {
+			method: "GETSTATE",
+		},
+		success: function (data) {
+			window["stateDone"](data.CANT, data.RO, data.RAM);
+		},
+		error: function (error) {
+			console.log(`Error ${error}`);
+		}
+	});
+}
+
+async function initiateState(CANT, ALU, RAM){
 	window.STATE = {
-		CHOSEN: 0,
-		CANT: 0,
-		ALU: "0000 0000 0000 0000 0000 0000 0000 0000",
-		RAM: [],
+		CHOSEN: RAM_choser.value,
+		CANT: CANT,
+		ALU: ALU,
+		RAM: RAM,
 	}
 	CONFIG.maxDigits = CONFIG.MEM.toString().length;
 	RAM_choser.max = CONFIG.MEM - 1;
 	DOMS.input_textbox_comm_addr.max = CONFIG.MEM - 1;
-	for (let i = 0; i < CONFIG.MEM; i++) {
-		STATE.RAM.push(
-			{
-				index: i,
-				clean: "0000 0000 0000 0000 0000 0000 0000 0000",
-				comm_c: 0,
-				comm_addr: 0,
-				comm_char: "",
-				data_int: 0,
-				data_float: 0.0,
-			}
-		);
-	}
 	refresh_UI();
 	endLoading();
 }
@@ -225,9 +229,7 @@ function refresh_UI(){
 }
 
 function show_RAM(){
-	for (let i = 0; i < select_RAM_list.options.length; i++) {
-		select_RAM_list.remove(i);
-	}
+	select_RAM_list.innerHTML = "";
 	for (let i = 0; i < CONFIG.MEM; i++) {
 		let cell = document.createElement('option');
 		cell.value = i;
@@ -240,12 +242,12 @@ function show_REGS(){
 	textBox_CANT.value = makeIndex(STATE.CANT);
 	textBox_CURcell.value = STATE.RAM[STATE.CANT].clean;
 	textBox_RO.value = "[RO]";
-	textBox_ALU.value = STATE.ALU;
+	textBox_ALU.value = STATE.ALU.clean;
 }
 
 function showOutput(){
 	let comm_c = ""
-	if (STATE.RAM[STATE.CHOSEN].comm_char !== "") tmp += STATE.RAM[STATE.CHOSEN].comm_char + " - ";
+	if (STATE.RAM[STATE.CHOSEN].comm_char !== "") comm_c += STATE.RAM[STATE.CHOSEN].comm_char + " - ";
 	comm_c += STATE.RAM[STATE.CHOSEN].comm_c;
 	output_comm_c.value = comm_c;
 
@@ -301,27 +303,6 @@ function isNumeric(str) {
 		   !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
 }
 
-
-function getState(){
-	$.ajax({
-		url: CONFIG.ajaxURL,
-		type: "GET",
-		data: {
-			method: "GETSTATE",
-		},
-		success: function (data) {			
-			console.log(data);
-			window["STATE"].CANT = data.CANT;
-			window["STATE"].ALU = data.RO;
-			window["STATE"].RAM = data.RAM;
-
-		},
-		error: function (error) {
-			console.log(`Error ${error}`);
-		}
-	});
-}
-
 function sendInput(inputData){
 	inputData.method = "SETMEMCELL";
 	$.ajax({
@@ -329,7 +310,11 @@ function sendInput(inputData){
 		type: "POST",
 		data: inputData,
 		success: function (data) {
-			console.log(data);
+			if (data.index === "RO")
+				window["STATE"].ALU = data;
+			else
+				window["STATE"].RAM[data.index] = data;
+			window["callRefresh"]();
 		},
 		error: function (error) {
 			console.log(`Error ${error}`);
