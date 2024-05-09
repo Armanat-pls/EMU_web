@@ -85,7 +85,7 @@
 						</div>
 						<div id = "input_zone_comm" style="display: none">
 							<input type="text" id = "input_ramwrite_comm_c">
-							<input type="number" id = "input_ramwrite_comm_addr">
+							<input type="number" id = "input_ramwrite_comm_addr" min="0" value="0" step="1">
 							<label for="input-ramwrite-comm-c" style="display: block;">Команда; адрес операнда</label>
 						</div>
 						<div id = "input_zone_data" style="display: none">

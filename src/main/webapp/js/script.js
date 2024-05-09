@@ -5,6 +5,7 @@ window.onload = async function(){
 	//Сброс отображения окна ввода при перезагрузке
 	set_radio_input_type("clean");
 	onchange_input_box("clean");
+	change_input_dataType("int")
 }
 
 function startLoading(){
@@ -50,6 +51,11 @@ async function initiateMain(){
 
 		input_dataType_radio_int: document.getElementById("input_data_type_radio_integer"),
 		input_dataType_radio_float: document.getElementById("input_data_type_radio_float"),
+
+		input_textbox_clean: document.getElementById("input_ramwrite_clean"),
+		input_textbox_comm_c: document.getElementById("input_ramwrite_comm_c"),
+		input_textbox_comm_addr: document.getElementById("input_ramwrite_comm_addr"),
+		input_textbox_data: document.getElementById("input_ramwrite_data"),
 
 		output_comm_c: document.getElementById("output_comm_c"),
 		output_comm_addr: document.getElementById("output_comm_addr"),
@@ -101,6 +107,7 @@ async function initiateState(){
 	}
 	CONFIG.maxDigits = CONFIG.MEM.toString().length
 	RAM_choser.max = CONFIG.MEM - 1;
+	DOM.input_textbox_comm_addr.max = CONFIG.MEM - 1;
 	for (let i = 0; i < CONFIG.MEM; i++) {
 		STATE.RAM.push(
 			{
@@ -168,7 +175,44 @@ function change_input_dataType(dataType){
 }
 
 function onclick_input_cell(){
+	let inputData = [];
+	inputData.push({type: INPUT_STATE.type});
+	inputData.push({chosen: STATE.CHOSEN});
+	switch (INPUT_STATE.type) {
+		case "clean":
+			let data = DOMS.input_textbox_clean.value;
+			if (data.length > CONFIG.CELL){
+				alert("Слишком длинный битовый набор!");
+				return;
+			}
+			if (!/^[01]+$/g.test(data)){
+				alert("Посторонние символы в битовом наборе!");
+				return;
+			}
+			inputData.push({data: data});
+			break;
+		case "comm":
+			inputData.push({comm_c: DOMS.input_textbox_comm_c.value});
+			let addr = validate_RAM_index_strict(DOMS.input_textbox_comm_addr.value);
+			if (addr === false){
+				alert("Адрес некорректен!");
+				return;
+			}
+			inputData.push({comm_addr: addr});
+			break;
+		case "data":
+			inputData.push({dataType: INPUT_STATE.dataType});
+			if (isNaN(DOMS.input_textbox_data.value)){
+				alert("Введено не число!");
+				return;
+			}
+			inputData.push({data: DOMS.input_textbox_data.value});
+			break;
+		default:
+			return;
+	}
 
+	sendInput(inputData);
 }
 
 function refresh_UI(){
@@ -212,6 +256,14 @@ function validate_RAM_index(value){
 	if (!Number.isInteger(value)) return 0;
 	if (value < 0) return 0;
 	else if (value >= CONFIG.MEM) return CONFIG.MEM - 1;
+	else return value;
+}
+
+function validate_RAM_index_strict(value){
+	value = Number(value);
+	if (!Number.isInteger(value)) return false;
+	if (value < 0) return false;
+	else if (value >= CONFIG.MEM) return false;
 	else return value;
 }
 
@@ -260,6 +312,21 @@ function getState(){
 			window["STATE"].ALU = data.RO;
 			window["STATE"].RAM = data.RAM;
 
+		},
+		error: function (error) {
+			console.log(`Error ${error}`);
+		}
+	});
+}
+
+function sendInput(inputData){
+	inputData.push({method: "SETMEMCELL"});
+	$.ajax({
+		url: CONFIG.ajaxURL,
+		type: "POST",
+		data: inputData,
+		success: function (data) {			
+			console.log(data);
 		},
 		error: function (error) {
 			console.log(`Error ${error}`);
