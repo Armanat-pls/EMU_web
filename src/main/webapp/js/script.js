@@ -100,12 +100,13 @@ function AJAXgetConfig(){
 	});
 }
 
-function getState(){
+function getState(clear = false){
+	let method = clear ? "CLEARMEM" : "GETSTATE";
 	$.ajax({
 		url: CONFIG.ajaxURL,
 		type: "GET",
 		data: {
-			method: "GETSTATE",
+			method: method,
 		},
 		success: function (data) {
 			window["stateDone"](data.CANT, data.RO, data.RAM);
@@ -222,6 +223,18 @@ function onclick_input_cell(){
 	sendInput(inputData);
 }
 
+function onclick_RAM_clear(){
+	getState(true);
+	RAM_choser.value = 0;
+	set_radio_input_type("clean");
+	onchange_input_box("clean");
+	change_input_dataType("int");
+	input_textbox_clean.value = "";
+	input_textbox_comm_c.value = "";
+	input_textbox_comm_addr.value = 0;
+	input_textbox_data.value = "";
+}
+
 function refresh_UI(){
 	show_RAM();
 	show_REGS();
@@ -304,6 +317,7 @@ function isNumeric(str) {
 }
 
 function sendInput(inputData){
+	startLoading();
 	inputData.method = "SETMEMCELL";
 	$.ajax({
 		url: CONFIG.ajaxURL,
@@ -315,6 +329,7 @@ function sendInput(inputData){
 			else
 				window["STATE"].RAM[data.index] = data;
 			window["callRefresh"]();
+			window["endLoading"]();
 		},
 		error: function (error) {
 			console.log(`Error ${error}`);

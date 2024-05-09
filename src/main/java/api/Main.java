@@ -33,8 +33,11 @@ public class Main extends HttpServlet {
 			case "GETSTATE":
 				json = api.getMemAll();
 				break;
+			case "CLEARMEM":
+				json = api.clearMEM();
+				break;
 			default:
-				json = "";
+				json = returnError("Метод не опознан");
 				break;
 		}
 		else json = returnError("Не указан метод");
@@ -66,7 +69,7 @@ public class Main extends HttpServlet {
 				json = "EXECALL";
 				break;
 			default:
-				json = "nothing";
+				json = returnError("Метод не опознан");
 				break;
 		}
 		else json = returnError("Не указан метод");

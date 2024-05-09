@@ -132,7 +132,7 @@
 		</div>
 	</div>
 	<div class = "bottom-row">
-		<button>Очистить память</button>
+		<button onclick="onclick_RAM_clear()">Очистить память</button>
 		<button>Считать файл памяти</button>
 		<button>Дамп памяти</button>
 		<button>Компилятор</button>

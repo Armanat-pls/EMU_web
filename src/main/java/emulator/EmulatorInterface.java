@@ -135,6 +135,14 @@ public class EmulatorInterface {
 		return s;
 	}
 
+	public String clearMEM(){
+		EMU emu = getEMU();
+		emu.RAM.zero();
+		emu.ALU.clearRO();
+		setEMU(emu);
+		return getMemAll();
+	}
+
 	public static String makeJSONentry(String key, int value, boolean last){
 		String s = "\"" + key + "\":" + value + "";
 		if (!last) s+=",";
