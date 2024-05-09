@@ -122,7 +122,8 @@ public class EmulatorInterface {
 		EMU emu = getEMU();
 		String s = "{";
 		s += makeJSONentry("CANT", emu.UU.CANT, false);
-		s += makeJSONentry("RO", bit_to_string(emu.ALU.get_RO()), false);
+		emuMEMcellContainer RO = new emuMEMcellContainer(emu.ALU.get_RO());
+		s += "\"RO\": " +  memCellToJSON(RO, 0, true) + ",";
 		s += "\"RAM\": [";
 		for (int i = 0; i < MEM; i++){
 			emuMEMcellContainer cell = new emuMEMcellContainer(emu.RAM.get_cell(i));
