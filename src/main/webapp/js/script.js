@@ -4,7 +4,7 @@ window.onload = async function(){
 
 	//Сброс отображения окна ввода при перезагрузке
 	set_radio_input_type("clean");
-	change_input_box();
+	onchange_input_box("clean");
 }
 
 function startLoading(){
@@ -46,6 +46,11 @@ async function initiateMain(){
 		input_type_radio_com: document.getElementById("input_type_radio_comm"),
 		input_type_radio_data: document.getElementById("input_type_radio_data"),
 
+		input_type_checkbox_ALU: document.getElementById("input_ALU"),
+
+		input_dataType_radio_int: document.getElementById("input_data_type_radio_integer"),
+		input_dataType_radio_float: document.getElementById("input_data_type_radio_float"),
+
 		output_comm_c: document.getElementById("output_comm_c"),
 		output_comm_addr: document.getElementById("output_comm_addr"),
 		output_integer: document.getElementById("output_integer"),
@@ -58,6 +63,11 @@ async function initiateMain(){
 		VER: "",
 		ajaxURL: '/EMU/main',
 		maxDigits: 0,
+	}
+	window.INPUT_STATE = {
+		type: "clean",
+		dataType: "int",
+		toALU: false
 	}
 	AJAXgetConfig();
 }
@@ -116,7 +126,8 @@ function makeIndex(i){
 	return index;
 }
 
-function change_input_box(){
+function onchange_input_box(target_radio){
+	INPUT_STATE.type = target_radio;
 	if (DOMS.input_type_radio_clean.checked) DOMS.input_zone_clean.style.display = "block";
 	else DOMS.input_zone_clean.style.display = "none";
 
@@ -128,11 +139,36 @@ function change_input_box(){
 }
 
 function set_radio_input_type(target_radio){
+	INPUT_STATE.type = target_radio;
 	if (target_radio === 'clean') DOMS.input_type_radio_clean.checked = "true";
 	else if (target_radio === 'comm') DOMS.input_type_radio_com.checked = "true";
 	else if (target_radio === 'data') DOMS.input_type_radio_data.checked = "true";
 
-	change_input_box();
+	onchange_input_box(target_radio);
+}
+
+function onchange_input_ALU(){
+	INPUT_STATE.toALU = DOMS.input_type_checkbox_ALU.checked;
+}
+
+function change_input_ALU(){
+	DOMS.input_type_checkbox_ALU.checked = !DOMS.input_type_checkbox_ALU.checked;
+	onchange_input_ALU();
+}
+
+function onchange_input_dataType(dataType){
+	INPUT_STATE.dataType = dataType;
+}
+
+function change_input_dataType(dataType){
+	INPUT_STATE.dataType = dataType;
+	if (dataType === 'int') DOMS.input_dataType_radio_int.checked = "true";
+	else if (dataType === 'float') DOMS.input_dataType_radio_float.checked = "true";
+	onchange_input_dataType(dataType);
+}
+
+function onclick_input_cell(){
+
 }
 
 function refresh_UI(){

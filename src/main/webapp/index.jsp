@@ -61,20 +61,20 @@
 				<div class = "container-input-inner">
 					<div class = "container-input-left">
 						<div>
-							<input type = "radio" name="input-type" id = "input_type_radio_clean" onchange="change_input_box()" checked>
+							<input type = "radio" name="input-type" id = "input_type_radio_clean" onchange="onchange_input_box('clean')" checked>
 							<label for="input-type-radio-clean" onclick="set_radio_input_type('clean')">Прямой ввод</label>
 						</div>
 						<div>
-							<input type = "radio" name="input-type" id = "input_type_radio_comm" onchange="change_input_box()">
+							<input type = "radio" name="input-type" id = "input_type_radio_comm" onchange="onchange_input_box('comm')">
 							<label for="input-type-radio-comm" onclick="set_radio_input_type('comm')">Команда</label>
 						</div>
 						<div>
-							<input type = "radio" name="input-type" id = "input_type_radio_data" onchange="change_input_box()">
+							<input type = "radio" name="input-type" id = "input_type_radio_data" onchange="onchange_input_box('data')">
 							<label for="input-type-radio-data" onclick="set_radio_input_type('data')">Данные</label>
 						</div>
 						<div>
-							<input type = "checkbox" name="input-ALU" id = "input_ALU">
-							<label for="input-ALU">Запись в регистр АЛУ</label>
+							<input type = "checkbox" name="input-ALU" id = "input_ALU" onchange="onchange_input_ALU()">
+							<label for="input-ALU" onclick="change_input_ALU()">Запись в регистр АЛУ</label>
 						</div>
 						
 					</div>
@@ -96,17 +96,17 @@
 								</div>
 								<div>
 									<div>
-										<input type = "radio" name="input-data-type" id = "input_data_type_radio_integer">
-										<label for="input-data-type-radio-integer">integer</label>
+										<input type = "radio" name="input-data-type" id = "input_data_type_radio_integer" onchange="onchange_input_dataType('int')">
+										<label for="input-data-type-radio-integer" onclick="change_input_dataType('int')">integer</label>
 									</div>
 									<div>
-										<input type = "radio" name="input-data-type" id = "input_data_type_radio_float">
-										<label for="input-data-type-radio-float">float</label>
+										<input type = "radio" name="input-data-type" id = "input_data_type_radio_float" onchange="onchange_input_dataType('float')">
+										<label for="input-data-type-radio-float" onclick="change_input_dataType('float')">float</label>
 									</div>
 								</div>
 							</div>
 						</div>
-						<button>Ввод</button>
+						<button onclick="onclick_input_cell()">Ввод</button>
 					</div>
 
 				</div>
