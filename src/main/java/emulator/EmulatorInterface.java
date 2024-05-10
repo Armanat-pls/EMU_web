@@ -2,6 +2,7 @@ package emulator;
 
 import static emulator.EMU.*;
 
+import java.util.ArrayList;
 import java.util.BitSet;
 
 import static emulator.core.Config.*;
@@ -180,6 +181,20 @@ public class EmulatorInterface {
 		if (emu.UU.CANT == MEM)
 			emu.UU.CANT--;
 		setEMU(emu);
+		return getMemAll(finalMessage);
+	}
+
+	public String fillRAMfromFile(ArrayList<String> lines, int ignoredCNT){
+		String finalMessage = "";
+		EMU emu = getEMU();
+		emu.RAM.zero();
+		
+		for (int i = 0; i < lines.size(); i++)
+			emu.RAM.write_cell(i, string_to_bit(lines.get(i)));
+
+		setEMU(emu);
+		finalMessage = "Заполнено " + lines.size() + " ячеек";
+		if (ignoredCNT > 0) finalMessage += " | Проигнорировано " + ignoredCNT + " ячеек";
 		return getMemAll(finalMessage);
 	}
 

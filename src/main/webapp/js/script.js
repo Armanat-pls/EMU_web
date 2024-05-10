@@ -408,3 +408,34 @@ function sendInput(inputData){
 		}
 	});
 }
+
+function handleAJAXError(error){
+	console.log(`Error ${error}`);
+	if (error.error !== "") alert(error.error);
+	window["endLoading"]();
+}
+
+function sendRAMfile(){
+	startLoading();
+	let formData = new FormData();
+	formData.append('file', $("#input_ram_file")[0].files[0]);
+	$.ajax({
+		url: '/EMU/FileRAMfill',
+		type: "POST",
+		cache: false,
+		contentType: false,
+		processData: false,
+		data: formData,
+		success: function(data){
+			window["STATE"].CANT = data.CANT;
+			window["STATE"].ALU = data.RO;
+			window["STATE"].RAM = data.RAM;
+			if (data.message !== "") alert(data.message);
+			window["callRefresh"]();
+			window["endLoading"]();
+		},
+		error: function(error){
+			handleAJAXError(error);
+		}
+	});
+}

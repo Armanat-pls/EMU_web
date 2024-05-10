@@ -134,7 +134,10 @@
 		</div>
 		<div class = "bottom-row">
 			<button onclick="onclick_RAM_clear()">Очистить память</button>
-			<button>Считать файл памяти</button>
+			<div>
+				<label for="input_ram_file">Заполнить память из файла</label>
+				<input type="file" id="input_ram_file" onchange="sendRAMfile()">
+			</div>
 			<button>Дамп памяти</button>
 			<button>Компилятор</button>
 		</div>
