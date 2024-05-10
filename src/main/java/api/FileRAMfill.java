@@ -75,10 +75,4 @@ public class FileRAMfill extends HttpServlet {
 		if (!line.matches("^[01 ]+$")) return false;
 		return true;
 	}
-
-	private String returnError(String message){
-		String result = makeJSONone("error", message);
-		response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-		return result;
-	}
 }
