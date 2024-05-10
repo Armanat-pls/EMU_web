@@ -54,7 +54,7 @@
 						</div>
 					</div>
 					<button onclick="setCANT()">Установить счётчик</button>
-					<button onclick="execONE()">Выполнить текущую ячейку</button>
+					<button onclick="execONE()">Выполнить одну ячейку</button>
 					<button onclick="execALL()">Выполнить программу</button>
 				</div>
 				<div class = "container-input">

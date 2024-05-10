@@ -31,7 +31,7 @@ public class Main extends HttpServlet {
 				json = api.getConfig();
 				break;
 			case "GETSTATE":
-				json = api.getMemAll();
+				json = api.getMemAll("Состояние получено");
 				break;
 			case "CLEARMEM":
 				json = api.clearMEM();
@@ -63,10 +63,10 @@ public class Main extends HttpServlet {
 				json = handleSetMemCell(request);
 				break;
 			case "EXECONE":
-				json = "EXECONE";
+				json = api.execONE();
 				break;
 			case "EXECALL":
-				json = "EXECALL";
+				json = api.execALL();
 				break;
 			default:
 				json = returnError("Метод не опознан");
@@ -86,7 +86,6 @@ public class Main extends HttpServlet {
 
 		String chosen_s = request.getParameter("chosen");
 		if (chosen_s == null) return returnError("Не указана выбранная ячейка");
-		//if (!validate_RAM_index(chosen_s)) return returnError("Некорректный индекс выбранной ячейки");
 		if (!validate_RAM_index(chosen_s)) return returnError("Некорректный индекс выбранной ячейки");
 		int chosen = Integer.parseInt(chosen_s);
 
@@ -161,10 +160,7 @@ public class Main extends HttpServlet {
 		if (CANT_s == null) return returnError("Не указано значение CANT");
 		if (!validate_RAM_index(CANT_s)) return returnError("Некорректное значение CANT");
 		int newCANT = Integer.parseInt(CANT_s);
-
 		response = api.setCANT(newCANT);
-		
-
 		return response;
 	}
 	private boolean validate_RAM_index(String addr_s){

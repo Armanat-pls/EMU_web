@@ -119,9 +119,10 @@ public class EmulatorInterface {
 		return memCellToJSON(cell, addr, fromRO);
 	}
 
-	public String getMemAll(){
+	public String getMemAll(String message){
 		EMU emu = getEMU();
 		String s = "{";
+		s += makeJSONentry("message", message, false);
 		s += makeJSONentry("CANT", emu.UU.CANT, false);
 		emuMEMcellContainer RO = new emuMEMcellContainer(emu.ALU.get_RO());
 		s += "\"RO\": " +  memCellToJSON(RO, 0, true) + ",";
@@ -141,7 +142,45 @@ public class EmulatorInterface {
 		emu.RAM.zero();
 		emu.ALU.clearRO();
 		setEMU(emu);
-		return getMemAll();
+		return getMemAll("Память очищена");
+	}
+
+	public String execONE(){
+		String finalMessage = "";
+		EMU emu = getEMU();
+		if(emu.UU.CANT == MEM - 1)		
+			finalMessage = "Достигнута последняя ячейка";
+		else{
+			emu.UU.RC = emu.RAM.get_cell(emu.UU.CANT);
+			if (emu.compute() == 666)
+				finalMessage = "Встречена команда завершения";
+		}
+		if (emu.UU.CANT == MEM)
+			emu.UU.CANT--;
+		setEMU(emu);
+		return getMemAll(finalMessage);
+	}
+
+	public String execALL(){
+		String finalMessage = "";
+		EMU emu = getEMU();
+		while(true)
+		{
+			emu.UU.RC = emu.RAM.get_cell(emu.UU.CANT);
+			if(emu.UU.CANT == MEM - 1){
+				finalMessage = "Достигнута последняя ячейка";
+				break;
+			}
+			if (emu.compute() == 666)
+			{
+				finalMessage = "Встречена команда завершения";
+				break;
+			}
+		}
+		if (emu.UU.CANT == MEM)
+			emu.UU.CANT--;
+		setEMU(emu);
+		return getMemAll(finalMessage);
 	}
 
 	public static String makeJSONentry(String key, int value, boolean last){

@@ -265,10 +265,10 @@ function requestPOST_CANT(){
 }
 
 function execONE(){
-	simplePOSTRequest("EXECONE");
+	execRequest("EXECONE");
 }
 function execALL(){
-	simplePOSTRequest("EXECALL");
+	execRequest("EXECALL");
 }
 
 function execRequest(type){
@@ -281,8 +281,9 @@ function execRequest(type){
 		},
 		success: function (data) {
 			window["STATE"].CANT = data.CANT;
-			window["STATE"].ALU = data.ALU;
+			window["STATE"].ALU = data.RO;
 			window["STATE"].RAM = data.RAM;
+			if (data.message !== "") alert(data.message);
 			window["callRefresh"]();
 			window["endLoading"]();
 		},
