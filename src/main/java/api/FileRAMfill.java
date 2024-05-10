@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import emulator.EmulatorInterface;
 
 import static emulator.EMU.int_to_bit;
-import static emulator.EmulatorInterface.*;
 import static emulator.core.Config.MEM;
 import static emulator.EMU.*;
 
