@@ -99,6 +99,7 @@ function AJAXgetConfig(){
 		},
 		error: function (error) {
 			console.log(`Error ${error}`);
+			window["endLoading"]();
 		}
 	});
 }
@@ -116,6 +117,7 @@ function getState(clear = false){
 		},
 		error: function (error) {
 			console.log(`Error ${error}`);
+			window["endLoading"]();
 		}
 	});
 }
@@ -248,7 +250,7 @@ function requestPOST_CANT(){
 		type: "POST",
 		data: {
 			method: "SETCANT",
-			CANT: STATE.chosen
+			CANT: STATE.CHOSEN
 		},
 		success: function (data) {
 			window["STATE"].CANT = data.CANT;
@@ -257,6 +259,7 @@ function requestPOST_CANT(){
 		},
 		error: function (error) {
 			console.log(`Error ${error}`);
+			window["endLoading"]();
 		}
 	});
 }
@@ -285,6 +288,7 @@ function execRequest(type){
 		},
 		error: function (error) {
 			console.log(`Error ${error}`);
+			window["endLoading"]();
 		}
 	});
 }
@@ -314,14 +318,14 @@ function show_REGS(){
 
 function showOutput(type = "MEM"){
 	let source = STATE.RAM[STATE.CHOSEN];
-	output_text_sign.innerHTML = "Содержимое ячейки";
+	output_text_sign.innerHTML = "Содержимое ячейки " + makeIndex(source.index);
 
 	if (type === "ALU"){
 		source = STATE.ALU
 		output_text_sign.innerHTML = "Содержимое аккумулятора";
 	}else if(type === "CANT"){
 		source = STATE.RAM[STATE.CANT];
-		output_text_sign.innerHTML = "Содержимое ячейки на исполнение";
+		output_text_sign.innerHTML = "Содержимое ячейки на исполнение " + makeIndex(source.index);;
 	}
 
 	let comm_c = ""
@@ -399,6 +403,7 @@ function sendInput(inputData){
 		},
 		error: function (error) {
 			console.log(`Error ${error}`);
+			window["endLoading"]();
 		}
 	});
 }

@@ -53,16 +53,17 @@ public class EmulatorInterface {
 	}
 
 
-	public int getCANT()
+	public String getCANT()
 	{
 		EMU emu = getEMU();
-		return emu.UU.CANT;
+		return makeJSONone("CANT", emu.UU.CANT);
 	}
-	public void setCANT(int newCANT)
+	public String setCANT(int newCANT)
 	{
 		EMU emu = getEMU();
 		emu.UU.CANT = newCANT;
 		setEMU(emu);
+		return getCANT();
 	}
 
 	public String setMemCellRAW(int addr, String input, boolean toALU){
@@ -167,6 +168,13 @@ public class EmulatorInterface {
 	}
 
 	public static String makeJSONone(String key, String value){
+		String s = "{";
+		s += makeJSONentry(key, value, true);
+		s += "}";
+		return s;
+	}
+
+	public static String makeJSONone(String key, int value){
 		String s = "{";
 		s += makeJSONentry(key, value, true);
 		s += "}";

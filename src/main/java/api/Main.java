@@ -57,7 +57,7 @@ public class Main extends HttpServlet {
 		if (method != null)
 		switch (method) {
 			case "SETCANT":
-				json = "SETCANT";
+				json = handleSetCANT(request);
 				break;
 			case "SETMEMCELL":
 				json = handleSetMemCell(request);
@@ -154,7 +154,19 @@ public class Main extends HttpServlet {
 		}
 		return response;
 	}
+	
+	private String handleSetCANT(HttpServletRequest req){
+		String response = "";
+		String CANT_s = request.getParameter("CANT");
+		if (CANT_s == null) return returnError("Не указано значение CANT");
+		if (!validate_RAM_index(CANT_s)) return returnError("Некорректное значение CANT");
+		int newCANT = Integer.parseInt(CANT_s);
 
+		response = api.setCANT(newCANT);
+		
+
+		return response;
+	}
 	private boolean validate_RAM_index(String addr_s){
 		int addr;
 		try {
