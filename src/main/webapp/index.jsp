@@ -15,7 +15,7 @@
 		<div class = "content-zone">
 			<div class = "left-side">
 				<div id="loading" style="display: block">ЗАГРУЗКА</div>
-				<div class = "container-COUNT container-cnt_reg">
+				<div class = "container-COUNT container-cnt_reg" onclick="showOutput('CANT')">
 					<div>СЧАК</div>
 					<div>Ячейка на исполнение</div>
 					<div>
@@ -25,7 +25,7 @@
 						<input type="text" id = "textBox_CURcell" class = "bit_out" readonly>
 					</div>
 				</div>
-				<div class = "container-REGISTER container-cnt_reg" onclick="showOutput(true)">
+				<div class = "container-REGISTER container-cnt_reg" onclick="showOutput('ALU')">
 					<div></div>
 					<div>Регистр АЛУ</div>
 					<div>
@@ -53,9 +53,9 @@
 							<input type="number" id = "RAM_choser" min="0" value="0" step="1" onchange="spinnerChange()">
 						</div>
 					</div>
-					<button>Установить счётчик</button>
-					<button>Выполнить текущую ячейку</button>
-					<button>Выполнить программу</button>
+					<button onclick="setCANT()">Установить счётчик</button>
+					<button onclick="execONE()">Выполнить текущую ячейку</button>
+					<button onclick="execALL()">Выполнить программу</button>
 				</div>
 				<div class = "container-input">
 					Запись ячейки

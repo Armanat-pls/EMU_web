@@ -30,6 +30,7 @@ async function initiateMain(){
 	window.initDone = configLoaded;
 	window.stateDone = initiateState;
 	window.callRefresh = refresh_UI;
+	window.callRefresh_regs = show_REGS;
 	window.DOMS = {
 		textBox_CANT: document.getElementById("textBox_CANT"),
 		textBox_CURcell: document.getElementById("textBox_CURcell"),
@@ -237,6 +238,57 @@ function onclick_RAM_clear(){
 	input_textbox_data.value = "";
 }
 
+function setCANT(){
+	requestPOST_CANT();
+}
+function requestPOST_CANT(){
+	startLoading();
+	$.ajax({
+		url: CONFIG.ajaxURL,
+		type: "POST",
+		data: {
+			method: "SETCANT",
+			CANT: STATE.chosen
+		},
+		success: function (data) {
+			window["STATE"].CANT = data.CANT;
+			window["callRefresh_regs"]();
+			window["endLoading"]();
+		},
+		error: function (error) {
+			console.log(`Error ${error}`);
+		}
+	});
+}
+
+function execONE(){
+	simplePOSTRequest("EXECONE");
+}
+function execALL(){
+	simplePOSTRequest("EXECALL");
+}
+
+function execRequest(type){
+	startLoading();
+	$.ajax({
+		url: CONFIG.ajaxURL,
+		type: "POST",
+		data: {
+			method: type
+		},
+		success: function (data) {
+			window["STATE"].CANT = data.CANT;
+			window["STATE"].ALU = data.ALU;
+			window["STATE"].RAM = data.RAM;
+			window["callRefresh"]();
+			window["endLoading"]();
+		},
+		error: function (error) {
+			console.log(`Error ${error}`);
+		}
+	});
+}
+
 function refresh_UI(){
 	show_RAM();
 	show_REGS();
@@ -260,11 +312,17 @@ function show_REGS(){
 	textBox_ALU.value = STATE.ALU.clean;
 }
 
-function showOutput(isRO = false){
+function showOutput(type = "MEM"){
+	let source = STATE.RAM[STATE.CHOSEN];
+	output_text_sign.innerHTML = "Содержимое ячейки";
 
-	let source = isRO ? STATE.ALU : STATE.RAM[STATE.CHOSEN];
-	if (isRO) output_text_sign.innerHTML = "Содержимое аккумулятора";
-	else output_text_sign.innerHTML = "Содержимое ячейки";
+	if (type === "ALU"){
+		source = STATE.ALU
+		output_text_sign.innerHTML = "Содержимое аккумулятора";
+	}else if(type === "CANT"){
+		source = STATE.RAM[STATE.CANT];
+		output_text_sign.innerHTML = "Содержимое ячейки на исполнение";
+	}
 
 	let comm_c = ""
 	if (source.comm_char !== "") comm_c += source.comm_char + " - ";
