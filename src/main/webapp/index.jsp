@@ -19,20 +19,20 @@
 					<div>СЧАК</div>
 					<div>Ячейка на исполнение</div>
 					<div>
-						<input type="text" id = "textBox_CANT" disabled>
+						<input type="text" id = "textBox_CANT" class = "index_out" readonly>
 					</div>
 					<div>
-						<input type="text" id = "textBox_CURcell"  disabled>
+						<input type="text" id = "textBox_CURcell" class = "bit_out" readonly>
 					</div>
 				</div>
-				<div class = "container-REGISTER container-cnt_reg">
+				<div class = "container-REGISTER container-cnt_reg" onclick="showOutput(true)">
 					<div></div>
 					<div>Регистр АЛУ</div>
 					<div>
-						<input type="text" id = "textBox_RO" disabled>
+						<input type="text" id = "textBox_RO" class = "index_out" readonly>
 					</div>
 					<div>
-						<input type="text" id = "textBox_ALU" disabled>
+						<input type="text" id = "textBox_ALU" class = "bit_out" readonly>
 					</div>
 				</div>
 				<div class = "container-RAM">
@@ -113,7 +113,7 @@
 					</div>
 				</div>
 				<div class = "container-output">
-					Содержимое ячейки
+					<span id = "output_text_sign">Содержимое ячейки</span>
 					<div class = "container-output-inner">
 						<div>
 							<label for="output-comm-c">Команда</label>

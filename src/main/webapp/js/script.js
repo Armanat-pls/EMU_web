@@ -63,6 +63,8 @@ async function initiateMain(){
 		output_comm_addr: document.getElementById("output_comm_addr"),
 		output_integer: document.getElementById("output_integer"),
 		output_float: document.getElementById("output_float"),
+
+		output_text_sign: document.getElementById("output_text_sign"),
 	}
 	window.CONFIG = {
 		MEM: 0,
@@ -258,15 +260,21 @@ function show_REGS(){
 	textBox_ALU.value = STATE.ALU.clean;
 }
 
-function showOutput(){
+function showOutput(isRO = false){
+
+	let source = isRO ? STATE.ALU : STATE.RAM[STATE.CHOSEN];
+	if (isRO) output_text_sign.innerHTML = "Содержимое аккумулятора";
+	else output_text_sign.innerHTML = "Содержимое ячейки";
+
 	let comm_c = ""
-	if (STATE.RAM[STATE.CHOSEN].comm_char !== "") comm_c += STATE.RAM[STATE.CHOSEN].comm_char + " - ";
-	comm_c += STATE.RAM[STATE.CHOSEN].comm_c;
+	if (source.comm_char !== "") comm_c += source.comm_char + " - ";
+	comm_c += source.comm_c;
 	output_comm_c.value = comm_c;
 
-	output_comm_addr.value = STATE.RAM[STATE.CHOSEN].comm_addr;
-	output_integer.value = STATE.RAM[STATE.CHOSEN].data_int;
-	output_float.value = STATE.RAM[STATE.CHOSEN].data_float;
+	output_comm_addr.value = source.comm_addr;
+	output_integer.value = source.data_int;
+	output_float.value = source.data_float;
+
 }
 
 function validate_RAM_index(value){

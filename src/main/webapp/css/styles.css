@@ -39,7 +39,7 @@ body {
 
 .container-cnt_reg{
 	display: grid;
-	grid-template-columns: 50% 50%;
+	grid-template-columns: 20% 80%;
 	grid-template-rows: 50% 50%;
 	gap: 1rem;
 }
@@ -69,4 +69,16 @@ body {
 	display: grid;
 	grid-template-rows: auto auto auto;
 	gap: 1rem;
+}
+
+.bit_out{
+	width: 260px;
+}
+
+.index_out{
+	width: 50px;
+}
+
+#select_RAM_list{
+	width: 320px;
 }
