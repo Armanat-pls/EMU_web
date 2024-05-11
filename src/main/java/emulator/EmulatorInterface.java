@@ -222,16 +222,16 @@ public class EmulatorInterface {
 		Infoblock ib = compiler.compile();
 
 		if (ib.errorrsList.size() != 0) message = "При компиляции возникли ошибки";
-
-		s += makeJSONentry("тест", ib.errorrsList.size(), false);
-/*
+ 
 		if((ib.errorrsList.size() == 0)&&(!ib.isCompileError())){
 			for (int i = 0; i < ib.memoryTable.length; i++) {
-				emu.RAM.write_cell(i, ib.memoryTable[i]);
+				BitSet cell = ib.memoryTable[i];
+				if (cell == null) cell = int_to_bit(0);
+				emu.RAM.write_cell(i, cell);
 			}
 			setEMU(emu);
 		}
-*/
+
 
 		if (ib.isCompileError()) message = ib.getCompileError();
 		s += makeJSONentry("message", message, false);
