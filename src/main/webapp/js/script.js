@@ -424,3 +424,7 @@ function sendRAMfile(){
 		}
 	});
 }
+
+function onclick_RAM_dump(){
+	location.href="/EMU/FileRAMget";
+}

@@ -88,7 +88,7 @@
 						<button class="btn btn-primary" onclick="onclick_RAM_clear()">Очистить память</button>
 					</div>
 					<div class="col-lg-4 mt-1">
-						<button class="btn btn-primary">Скачать состояние</button>
+						<button class="btn btn-primary" onclick="onclick_RAM_dump()">Скачать состояние</button>
 					</div>
 				</div>
 
