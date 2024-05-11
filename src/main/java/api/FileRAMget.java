@@ -1,25 +1,14 @@
 package api;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.Part;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 
 import emulator.EmulatorInterface;
-
-import static emulator.EMU.int_to_bit;
-import static emulator.core.Config.MEM;
-import static emulator.EMU.*;
 
 @WebServlet(name = "api.FileRAMget", urlPatterns = "/FileRAMget")
 public class FileRAMget extends HttpServlet {
