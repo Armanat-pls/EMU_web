@@ -1,32 +1,17 @@
 window.onload = async function(){
 	await initiateMain();
-	await startLoading();
 
-	//Сброс отображения окна ввода при перезагрузке
 	set_radio_input_type("clean");
 	onchange_input_box("clean");
 	change_input_dataType("int")
 }
 
-function startLoading(){
-	window.isLoading = true;
-	document.getElementById("loading").style.display = "block";
-	console.log("Загрузка началась");
-
-}
-function endLoading(){
-	document.getElementById("loading").style.display = "none";
-	console.log("Загрузка завершена");
-	window.isLoading = false;
-}
 function configLoaded(){
 	getState();
 }
 
 async function initiateMain(){
 	window.isLoading = true;
-	window.waitStart = startLoading;
-	window.waitDone = endLoading;
 	window.initDone = configLoaded;
 	window.stateDone = initiateState;
 	window.callRefresh = refresh_UI;
@@ -34,9 +19,13 @@ async function initiateMain(){
 	window.DOMS = {
 		textBox_CANT: document.getElementById("textBox_CANT"),
 		textBox_CURcell: document.getElementById("textBox_CURcell"),
+		textBox_CURcell_comm_c: document.getElementById("output_CANT_comm_c"),
+		textBox_CURcell_comm_addr: document.getElementById("output_CANT_addr"),
 
-		textBox_RO: document.getElementById("textBox_RO"),
+
 		textBox_ALU: document.getElementById("textBox_ALU"),
+		textBox_ALU_int: document.getElementById("output_ALU_integer"),
+		textBox_ALU_float: document.getElementById("output_ALU_float"),
 
 		select_RAM_list: document.getElementById("select_RAM_list"),
 
@@ -99,7 +88,6 @@ function AJAXgetConfig(){
 		},
 		error: function (error) {
 			console.log(`Error ${error}`);
-			window["endLoading"]();
 		}
 	});
 }
@@ -117,7 +105,6 @@ function getState(clear = false){
 		},
 		error: function (error) {
 			console.log(`Error ${error}`);
-			window["endLoading"]();
 		}
 	});
 }
@@ -130,10 +117,9 @@ async function initiateState(CANT, ALU, RAM){
 		RAM: RAM,
 	}
 	CONFIG.maxDigits = CONFIG.MEM.toString().length;
-	RAM_choser.max = CONFIG.MEM - 1;
+	DOMS.RAM_choser.max = CONFIG.MEM - 1;
 	DOMS.input_textbox_comm_addr.max = CONFIG.MEM - 1;
 	refresh_UI();
-	endLoading();
 }
 
 function makeIndex(i){
@@ -230,14 +216,14 @@ function onclick_input_cell(){
 
 function onclick_RAM_clear(){
 	getState(true);
-	RAM_choser.value = 0;
+	DOMS.RAM_choser.value = 0;
 	set_radio_input_type("clean");
 	onchange_input_box("clean");
 	change_input_dataType("int");
-	input_textbox_clean.value = "";
-	input_textbox_comm_c.value = "";
-	input_textbox_comm_addr.value = 0;
-	input_textbox_data.value = "";
+	DOMS.input_textbox_clean.value = "";
+	DOMS.input_textbox_comm_c.value = "";
+	DOMS.input_textbox_comm_addr.value = 0;
+	DOMS.input_textbox_data.value = "";
 }
 
 function setCANT(){
@@ -255,11 +241,9 @@ function requestPOST_CANT(){
 		success: function (data) {
 			window["STATE"].CANT = data.CANT;
 			window["callRefresh_regs"]();
-			window["endLoading"]();
 		},
 		error: function (error) {
 			console.log(`Error ${error}`);
-			window["endLoading"]();
 		}
 	});
 }
@@ -285,11 +269,9 @@ function execRequest(type){
 			window["STATE"].RAM = data.RAM;
 			if (data.message !== "") alert(data.message);
 			window["callRefresh"]();
-			window["endLoading"]();
 		},
 		error: function (error) {
 			console.log(`Error ${error}`);
-			window["endLoading"]();
 		}
 	});
 }
@@ -311,24 +293,25 @@ function show_RAM(){
 }
 
 function show_REGS(){
-	textBox_CANT.value = makeIndex(STATE.CANT);
-	textBox_CURcell.value = STATE.RAM[STATE.CANT].clean;
-	textBox_RO.value = "[RO]";
-	textBox_ALU.value = STATE.ALU.clean;
+	DOMS.textBox_CANT.value = makeIndex(STATE.CANT);
+	DOMS.textBox_CURcell.value = STATE.RAM[STATE.CANT].clean;
+
+	let cant = STATE.RAM[STATE.CANT];
+	let comm_c = ""
+	if (cant.comm_char !== "") comm_c += cant.comm_char + " - ";
+	comm_c += cant.comm_c;
+	DOMS.textBox_CURcell_comm_c.value = comm_c;
+	DOMS.textBox_CURcell_comm_addr.value = cant.comm_addr;
+
+	DOMS.textBox_ALU.value = STATE.ALU.clean;
+	DOMS.textBox_ALU_int.value = STATE.ALU.data_int;
+	DOMS.textBox_ALU_float.value = STATE.ALU.data_float;
+
 }
 
-function showOutput(type = "MEM"){
+function showOutput(){
 	let source = STATE.RAM[STATE.CHOSEN];
 	output_text_sign.innerHTML = "Содержимое ячейки " + makeIndex(source.index);
-
-	if (type === "ALU"){
-		source = STATE.ALU
-		output_text_sign.innerHTML = "Содержимое аккумулятора";
-	}else if(type === "CANT"){
-		source = STATE.RAM[STATE.CANT];
-		output_text_sign.innerHTML = "Содержимое ячейки на исполнение " + makeIndex(source.index);;
-	}
-
 	let comm_c = ""
 	if (source.comm_char !== "") comm_c += source.comm_char + " - ";
 	comm_c += source.comm_c;
@@ -400,11 +383,9 @@ function sendInput(inputData){
 			else
 				window["STATE"].RAM[data.index] = data;
 			window["callRefresh"]();
-			window["endLoading"]();
 		},
 		error: function (error) {
 			console.log(`Error ${error}`);
-			window["endLoading"]();
 		}
 	});
 }
@@ -412,7 +393,6 @@ function sendInput(inputData){
 function handleAJAXError(error){
 	console.log(`Error ${error}`);
 	if (error.error !== "") alert(error.error);
-	window["endLoading"]();
 }
 
 function sendRAMfile(){
@@ -432,7 +412,6 @@ function sendRAMfile(){
 			window["STATE"].RAM = data.RAM;
 			if (data.message !== "") alert(data.message);
 			window["callRefresh"]();
-			window["endLoading"]();
 		},
 		error: function(error){
 			handleAJAXError(error);

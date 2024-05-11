@@ -84,10 +84,10 @@
 					</div>
 				</div>
 				<div class="row mt-2">
-					<div class="col-lg-4">
+					<div class="col-lg-4 mt-1">
 						<button class="btn btn-primary" onclick="onclick_RAM_clear()">Очистить память</button>
 					</div>
-					<div class="col-lg-4">
+					<div class="col-lg-4 mt-1">
 						<button class="btn btn-primary">Скачать состояние</button>
 					</div>
 				</div>
