@@ -233,7 +233,6 @@ function setCANT(){
 	requestPOST_CANT();
 }
 function requestPOST_CANT(){
-	startLoading();
 	$.ajax({
 		url: CONFIG.ajaxURL,
 		type: "POST",
@@ -259,7 +258,6 @@ function execALL(){
 }
 
 function execRequest(type){
-	startLoading();
 	$.ajax({
 		url: CONFIG.ajaxURL,
 		type: "POST",
@@ -381,7 +379,6 @@ function isNumeric(str) {
 }
 
 function sendInput(inputData){
-	startLoading();
 	inputData.method = "SETMEMCELL";
 	$.ajax({
 		url: CONFIG.ajaxURL,
@@ -406,7 +403,6 @@ function handleAJAXError(error){
 }
 
 function sendRAMfile(){
-	startLoading();
 	let formData = new FormData();
 	formData.append('file', $("#input_ram_file")[0].files[0]);
 	$.ajax({

@@ -79,7 +79,7 @@ public class EmulatorInterface {
 	}
 	public String setMemCellComm(int addr, int commandCode, int commandAddr, boolean toALU){
 		EMU emu = getEMU();
-		BitSet tmp = make_one(commandCode, commandCode);
+		BitSet tmp = make_one(commandCode, commandAddr);
 		if (toALU)
 			emu.ALU.write_RO(tmp);
 		else
