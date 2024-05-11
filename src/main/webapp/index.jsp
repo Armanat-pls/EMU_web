@@ -229,12 +229,6 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<th scope="row">1</th>
-									<td>027</td>
-									<td>type:int</td>
-									<td>Error: Unexpected place for type</td>
-								</tr>
 							</tbody>
 						</table>
 					</div>
@@ -243,14 +237,12 @@
 							<thead>
 								<tr>
 									<th scope="col">#</th>
-									<th scope="col">Токен</th>
+									<th scope="col">Строка</th>
+									<th scope="col">Тип токена</th>
+									<th scope="col">Значение</th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<th scope="row">1</th>
-									<td>type : int</td>
-								</tr>
 							</tbody>
 						</table>
 					</div>
@@ -261,18 +253,12 @@
 									<th scope="col">#</th>
 									<th scope="col">Адрес</th>
 									<th scope="col">Тип</th>
+									<th scope="col">Имя</th>
 									<th scope="col">Значение int</th>
 									<th scope="col">Значение float</th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<th scope="row">1</th>
-									<td>001</td>
-									<td>intE</td>
-									<td>0</td>
-									<td>0.0</td>
-								</tr>
 							</tbody>
 						</table>
 					</div>
@@ -283,29 +269,24 @@
 									<th scope="col">#</th>
 									<th scope="col">Тип</th>
 									<th scope="col">Объект записи</th>
-									<th scope="col">Операция</th>
+									<th scope="col">Операнд 1</th>
+									<th scope="col">Оператор</th>
+									<th scope="col">Операнд 2</th>
 									<th scope="col">Глубина</th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<th scope="row">1</th>
-									<td>whileblock</td>
-									<td>null</td>
-									<td>x<=10</td>
-									<td>0</td>
-								</tr>
 							</tbody>
 						</table>
 					</div>
 				</div>
 			</div>
 			<div class="col">
-				<div>Компиляция не начата</div>
-				<div>Ошибок - 0</div>
-				<div>Токенов - 5</div>
-				<div>Переменных - 12</div>
-				<div>Инструкций - 15</div>
+				<div id="compiler-message-box">Компиляция не начата</div>
+				<div>Ошибок - <span id="compiler-errors-number">0</span></div>
+				<div>Токенов - <span id="compiler-tokens-number">0</span></div>
+				<div>Переменных - <span id="compiler-variables-number">0</span></div>
+				<div>Инструкций - <span id="compiler-instructions-number">0</span></div>
 			</div>
 		</div>
 

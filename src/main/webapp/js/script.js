@@ -71,6 +71,13 @@ async function initiateMain(){
 		dataType: "int",
 		toALU: false
 	}
+	window.COMPILER_STATE = {
+		ERORRS: "",
+		TOKENS: "",
+		VARIABLES: "",
+		INSTRUCTIONS: "",
+		message: "Компиляция не выполнялась"
+	}
 	AJAXgetConfig();
 }
 
@@ -81,7 +88,7 @@ function AJAXgetConfig(){
 		data: {
 			method: "GETCONFIG",
 		},
-		success: function (data) {			
+		success: function (data) {
 			window["CONFIG"].MEM = data.MEM;
 			window["CONFIG"].CELL = data.CELL;
 			window["CONFIG"].BMEM = data.BMEM;
@@ -281,6 +288,7 @@ function refresh_UI(){
 	show_RAM();
 	show_REGS();
 	showOutput();
+	refresh_Compiler();
 }
 
 function show_RAM(){
@@ -440,11 +448,16 @@ function sendCompilerFile(){
 		processData: false,
 		data: formData,
 		success: function(data){
-			/*
 			window["STATE"].CANT = data.CANT;
 			window["STATE"].ALU = data.RO;
 			window["STATE"].RAM = data.RAM;
-			*/
+
+			window["COMPILER_STATE"].ERORRS = data.ERORRS;
+			window["COMPILER_STATE"].TOKENS = data.TOKENS;
+			window["COMPILER_STATE"].VARIABLES = data.VARIABLES;
+			window["COMPILER_STATE"].INSTRUCTIONS = data.INSTRUCTIONS;
+			window["COMPILER_STATE"].message = data.message;
+
 			console.log(data);
 			if (data.message !== "") alert(data.message);
 			window["callRefresh"]();
@@ -453,4 +466,177 @@ function sendCompilerFile(){
 			handleAJAXError(error);
 		}
 	});
+}
+
+function refresh_Compiler(){
+	document.getElementById('compiler-message-box').innerHTML = COMPILER_STATE.message;	
+	compiler_showErrors();
+	compiler_showTokens();
+	compiler_showVariables();
+	compiler_showInstructions();
+}
+
+function compiler_showErrors(){
+	let tbodyRef = document.getElementById('compiler-errors-table').getElementsByTagName('tbody')[0];
+	let numRef = document.getElementById("compiler-errors-number");
+	tbodyRef.innerHTML = "";
+	numRef.innerHTML = "0";
+	const errors = COMPILER_STATE.ERORRS
+	if (errors === "") return;
+	numRef.innerHTML = errors.length;
+	for (let i = 0; i < errors.length; i++){
+		const row = document.createElement("tr");
+
+		let cell = document.createElement("th");
+		let cellText = document.createTextNode(i+1);
+		cell.appendChild(cellText);
+		row.appendChild(cell);
+
+		cell = document.createElement("td");
+		cellText = document.createTextNode(errors[i].codeLine);
+		cell.appendChild(cellText);
+		row.appendChild(cell);
+
+		cell = document.createElement("td");
+		cellText = document.createTextNode(errors[i].token);
+		cell.appendChild(cellText);
+		row.appendChild(cell);
+
+		cell = document.createElement("td");
+		cellText = document.createTextNode(errors[i].error);
+		cell.appendChild(cellText);
+		row.appendChild(cell);
+
+		tbodyRef.appendChild(row);
+	}
+}
+
+function compiler_showTokens(){
+	let tbodyRef = document.getElementById('compiler-tokens-table').getElementsByTagName('tbody')[0];
+	let numRef = document.getElementById("compiler-tokens-number");
+	tbodyRef.innerHTML = "";
+	numRef.innerHTML = "0";
+	const tokens = COMPILER_STATE.TOKENS
+	if (tokens === "") return;
+	numRef.innerHTML = tokens.length;
+	for (let i = 0; i < tokens.length; i++){
+		const row = document.createElement("tr");
+
+		let cell = document.createElement("th");
+		let cellText = document.createTextNode(i+1);
+		cell.appendChild(cellText);
+		row.appendChild(cell);
+
+		cell = document.createElement("td");
+		cellText = document.createTextNode(tokens[i].codeLine);
+		cell.appendChild(cellText);
+		row.appendChild(cell);
+
+		cell = document.createElement("td");
+		cellText = document.createTextNode(tokens[i].tokenType);
+		cell.appendChild(cellText);
+		row.appendChild(cell);
+
+		cell = document.createElement("td");
+		cellText = document.createTextNode(tokens[i].value);
+		cell.appendChild(cellText);
+		row.appendChild(cell);
+
+		tbodyRef.appendChild(row);
+	}
+}
+
+function compiler_showVariables(){
+	let tbodyRef = document.getElementById('compiler-variables-table').getElementsByTagName('tbody')[0];
+	let numRef = document.getElementById("compiler-variables-number");
+	tbodyRef.innerHTML = "";
+	numRef.innerHTML = "0";
+	const variables = COMPILER_STATE.VARIABLES
+	if (variables === "") return;
+	numRef.innerHTML = variables.length;
+	for (let i = 0; i < variables.length; i++){
+		const row = document.createElement("tr");
+
+		let cell = document.createElement("th");
+		let cellText = document.createTextNode(i+1);
+		cell.appendChild(cellText);
+		row.appendChild(cell);
+
+		cell = document.createElement("td");
+		cellText = document.createTextNode(variables[i].address);
+		cell.appendChild(cellText);
+		row.appendChild(cell);
+
+		cell = document.createElement("td");
+		cellText = document.createTextNode(variables[i].type);
+		cell.appendChild(cellText);
+		row.appendChild(cell);
+
+		cell = document.createElement("td");
+		cellText = document.createTextNode(variables[i].name);
+		cell.appendChild(cellText);
+		row.appendChild(cell);
+
+		cell = document.createElement("td");
+		cellText = document.createTextNode(variables[i].intVal);
+		cell.appendChild(cellText);
+		row.appendChild(cell);
+
+		cell = document.createElement("td");
+		cellText = document.createTextNode(variables[i].floatVal);
+		cell.appendChild(cellText);
+		row.appendChild(cell);
+
+		tbodyRef.appendChild(row);
+	}
+}
+
+function compiler_showInstructions(){
+	let tbodyRef = document.getElementById('compiler-instructions-table').getElementsByTagName('tbody')[0];
+	let numRef = document.getElementById("compiler-instructions-number");
+	tbodyRef.innerHTML = "";
+	numRef.innerHTML = "0";
+	const instructions = COMPILER_STATE.INSTRUCTIONS;
+	if (instructions === "") return;
+	numRef.innerHTML = instructions.length;
+	for (let i = 0; i < instructions.length; i++){
+		const row = document.createElement("tr");
+
+		let cell = document.createElement("th");
+		let cellText = document.createTextNode(i+1);
+		cell.appendChild(cellText);
+		row.appendChild(cell);
+
+		cell = document.createElement("td");
+		cellText = document.createTextNode(instructions[i].type);
+		cell.appendChild(cellText);
+		row.appendChild(cell);
+
+		cell = document.createElement("td");
+		cellText = document.createTextNode(instructions[i].writeTo);
+		cell.appendChild(cellText);
+		row.appendChild(cell);
+
+		cell = document.createElement("td");
+		cellText = document.createTextNode(instructions[i].operand1);
+		cell.appendChild(cellText);
+		row.appendChild(cell);
+
+		cell = document.createElement("td");
+		cellText = document.createTextNode(instructions[i].operator);
+		cell.appendChild(cellText);
+		row.appendChild(cell);
+
+		cell = document.createElement("td");
+		cellText = document.createTextNode(instructions[i].operand2);
+		cell.appendChild(cellText);
+		row.appendChild(cell);
+
+		cell = document.createElement("td");
+		cellText = document.createTextNode(instructions[i].blockDeep);
+		cell.appendChild(cellText);
+		row.appendChild(cell);
+
+		tbodyRef.appendChild(row);
+	}
 }
