@@ -108,7 +108,7 @@
 				</div>
 
 				<div class = "row container-input mt-2">
-					<h5>Запись в ячейку 0</h5>
+					<h5 id="input_cell_label">Запись в ячейку 0</h5>
 					<div class = "row container-input-inner">
 						<div class = "col-lg-5 container-input-left">
 							<div>

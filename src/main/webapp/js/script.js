@@ -44,6 +44,8 @@ async function initiateMain(){
 		input_dataType_radio_int: document.getElementById("input_data_type_radio_integer"),
 		input_dataType_radio_float: document.getElementById("input_data_type_radio_float"),
 
+		input_cell_label: document.getElementById("input_cell_label"),
+
 		input_textbox_clean: document.getElementById("input_ramwrite_clean"),
 		input_textbox_comm_c: document.getElementById("input_ramwrite_comm_c"),
 		input_textbox_comm_addr: document.getElementById("input_ramwrite_comm_addr"),
@@ -154,6 +156,7 @@ function set_radio_input_type(target_radio){
 
 function onchange_input_ALU(){
 	INPUT_STATE.toALU = DOMS.input_type_checkbox_ALU.checked;
+	setInputText();
 }
 
 function change_input_ALU(){
@@ -311,15 +314,15 @@ function show_REGS(){
 
 function showOutput(){
 	let source = STATE.RAM[STATE.CHOSEN];
-	output_text_sign.innerHTML = "Содержимое ячейки " + makeIndex(source.index);
+	DOMS.output_text_sign.innerHTML = "Содержимое ячейки " + makeIndex(source.index);
 	let comm_c = ""
 	if (source.comm_char !== "") comm_c += source.comm_char + " - ";
 	comm_c += source.comm_c;
-	output_comm_c.value = comm_c;
+	DOMS.output_comm_c.value = comm_c;
 
-	output_comm_addr.value = source.comm_addr;
-	output_integer.value = source.data_int;
-	output_float.value = source.data_float;
+	DOMS.output_comm_addr.value = source.comm_addr;
+	DOMS.output_integer.value = source.data_int;
+	DOMS.output_float.value = source.data_float;
 
 }
 
@@ -341,24 +344,31 @@ function validate_RAM_index_strict(value){
 
 function RAM_listChange(){
 	let value = validate_RAM_index(select_RAM_list.value);
-	RAM_choser.value = value;
+	DOMS.RAM_choser.value = value;
 	setChosen(value);
 }
 
 function spinnerChange(){
 	let value = validate_RAM_index(RAM_choser.value);
-	RAM_choser.value = value;
-	select_RAM_list.value = value;
+	DOMS.RAM_choser.value = value;
+	DOMS.select_RAM_list.value = value;
 	setChosen(value);
+}
+
+function setInputText(){
+	let line = "";
+	if (INPUT_STATE.toALU === true)
+		line = "Запись в аккумулятор";
+	else
+		line = "Запись в ячейку " + STATE.CHOSEN;
+	DOMS.input_cell_label.innerHTML = line;
 }
 
 function setChosen(i){
 	STATE.CHOSEN = i;
+	setInputText();
 	showOutput();
 }
-
-
-
 
 function isNumeric(num){
 	return !isNaN(num)
