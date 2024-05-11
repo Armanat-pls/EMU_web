@@ -7,6 +7,8 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import emulator.EmulatorInterface;
 
@@ -22,9 +24,16 @@ public class FileRAMget extends HttpServlet {
 		this.response=res;
 		this.api = new EmulatorInterface(request);
 		String dump = api.dumpRAM();
+		String filename = "emu_memory_dump";
+
+		LocalDateTime current = LocalDateTime.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss");
+		String formatted = current.format(formatter);
+
+		filename = filename + "_" + formatted + ".txt";
 
 		response.setContentType("text/plain");
-		response.setHeader("Content-disposition", "attachment; filename=memory_dump.txt");
+		response.setHeader("Content-disposition", "attachment; filename="+filename);
 		PrintWriter printWriter = response.getWriter();
 		printWriter.write(dump);
 		printWriter.close();
