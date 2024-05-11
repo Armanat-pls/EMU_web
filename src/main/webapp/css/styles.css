@@ -1,84 +1,25 @@
-* {
-	box-sizing: border-box;
-}
-
-.main-container{
-	max-width: 1000px;
-	width: 100%;
-	height: 100%;
-	margin: auto;
-	margin-top: 10px;
-}
-
-body {
-	font-family: sans-serif;
-	font-size: 18px;
-	display: flex;
-	align-items: center;
-	min-height: 100vh;
-	background-color:bisque;
-}
-
-.content-zone{
-	display: grid;
-	grid-template-columns: 50% 50%;
-	gap: 1rem;
-}
-
-.left-side{
-	display: grid;
-	grid-template-rows: auto auto auto;
-	gap: 1rem;
-
-}
-.right-side{
-	display: grid;
-	grid-template-rows: auto auto auto;
-	gap: 1rem;
-}
-
-.container-cnt_reg{
-	display: grid;
-	grid-template-columns: 20% 80%;
-	grid-template-rows: 50% 50%;
-	gap: 1rem;
-}
-.container-controls{
-	
-}
-
-.container-CANT_select{
-	display: inline-grid;
-	grid-template-rows: 50% 50%;
-	gap: 1rem;
-}
-
-.container-input-inner{
-	display: grid;
-	grid-template-columns: 40% 60%;
-	gap: 1rem;
-}
-
-.container-input-zone-data{
-	display: grid;
-	grid-template-columns: 70% 30%;
-	gap: 1rem;
-}
-
-.container-output-inner{
-	display: grid;
-	grid-template-rows: auto auto auto;
-	gap: 1rem;
+.index_out{
+	max-width: 80px;
 }
 
 .bit_out{
-	width: 260px;
+	max-width: 350px;
 }
 
-.index_out{
-	width: 50px;
+.num_out{
+	max-width: 180px;
 }
+
 
 #select_RAM_list{
-	width: 320px;
+	max-width: 420px;
+}
+
+.container-input-left *, .dataType-radio *{
+	cursor: pointer;
+}
+
+.center_button{
+	max-width: fit-content !important;
+	margin: auto !important;
 }
