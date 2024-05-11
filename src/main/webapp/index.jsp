@@ -8,7 +8,7 @@
 
 	<link rel="stylesheet" href="css/styles.css">
 	<script type="text/javascript" src="js/script.js"></script>
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script type="text/javascript" src="js/jQuery_3.7.1.js"></script>
 </head>
 <body>
 	<div class = "main-container">
