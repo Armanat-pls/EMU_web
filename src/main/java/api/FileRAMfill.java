@@ -42,7 +42,6 @@ public class FileRAMfill extends HttpServlet {
 		this.response=res;
 		this.api = new EmulatorInterface(request);
 		String json = "";
-		boolean fail = false;
 		ArrayList<String> lines = new ArrayList<String>();
 		Part part = request.getParts().iterator().next();
 		InputStream partStream = part.getInputStream();
@@ -59,7 +58,7 @@ public class FileRAMfill extends HttpServlet {
 			}
 		};
 
-		if (!fail) json = api.fillRAMfromFile(lines, ignoredCNT);
+		json = api.fillRAMfromFile(lines, ignoredCNT);
 		response.setContentType("application/json");
 		PrintWriter printWriter = response.getWriter();
 		printWriter.write(json);

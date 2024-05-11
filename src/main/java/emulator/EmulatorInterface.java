@@ -198,6 +198,16 @@ public class EmulatorInterface {
 		return getMemAll(finalMessage);
 	}
 
+	public String dumpRAM(){
+		String dump = "";
+		EMU emu = getEMU();
+		for (int i = 0; i < MEM; i++){
+			dump += bit_to_string(emu.RAM.get_cell(i));
+			if (i != MEM - 1) dump += "\n";
+		}
+		return dump;
+	}
+
 	public static String makeJSONentry(String key, int value, boolean last){
 		String s = "\"" + key + "\":" + value + "";
 		if (!last) s+=",";
