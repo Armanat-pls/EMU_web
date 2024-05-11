@@ -23,3 +23,9 @@
 	max-width: fit-content !important;
 	margin: auto !important;
 }
+
+.table-box{
+	overflow-y:scroll;
+	height:600px;
+	display:block;
+}

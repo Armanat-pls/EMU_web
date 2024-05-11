@@ -194,99 +194,107 @@
 		</div>
 
 		<div class="row mt-4 mb-3 border">
-			<h4>Компилятор</h4>
-			<div>
-				<label for="input_ram_file" class="form-label">Загрузить исходный код и скомпилировать программу</label>
-				<input class="form-control bit_out" type="file" id="compiler_source_file" onchange="sendCompilerFile()">
-			</div>
+			<div class="row">
 
-			<div class="col-lg-9">
-
-				<ul class="nav nav-tabs mt-2" id="compilerTabs" role="tablist">
-					<li class="nav-item" role="presentation">
-						<button class="nav-link active" id="compiler-errors-tab" data-bs-toggle="tab" data-bs-target="#compiler-errors" type="button" role="tab">Ошибки</button>
-					</li>
-					<li class="nav-item" role="presentation">
-						<button class="nav-link" id="compiler-tokens-tab" data-bs-toggle="tab" data-bs-target="#compiler-tokens" type="button" role="tab" >Токены</button>
-					</li>
-					<li class="nav-item" role="presentation">
-						<button class="nav-link" id="compiler-variables-tab" data-bs-toggle="tab" data-bs-target="#compiler-variables" type="button" role="tab">Переменные</button>
-					</li>
-					<li class="nav-item" role="presentation">
-						<button class="nav-link" id="compiler-instructions-tab" data-bs-toggle="tab" data-bs-target="#compiler-instructions" type="button" role="tab">Инструкции</button>
-					</li>
-				</ul>
-
-				<div class="tab-content" id="compilerTabsContent">
-					<div class="border border-top-0 mb-2 tab-pane show active" id="compiler-errors" role="tabpanel">
-						<table class="table" id="compiler-errors-table">
-							<thead>
-								<tr>
-									<th scope="col">#</th>
-									<th scope="col">Строка</th>
-									<th scope="col">Токен</th>
-									<th scope="col">Ошибка</th>
-								</tr>
-							</thead>
-							<tbody>
-							</tbody>
-						</table>
+				<div class="col">
+					<h4>Компилятор</h4>
+					<div>
+						<label for="input_ram_file" class="form-label">Загрузить исходный код и скомпилировать программу</label>
+						<input class="form-control bit_out" type="file" id="compiler_source_file" onchange="sendCompilerFile()">
 					</div>
-					<div class="border border-top-0 mb-2 tab-pane" id="compiler-tokens" role="tabpanel">
-						<table class="table" id="compiler-tokens-table">
-							<thead>
-								<tr>
-									<th scope="col">#</th>
-									<th scope="col">Строка</th>
-									<th scope="col">Тип токена</th>
-									<th scope="col">Значение</th>
-								</tr>
-							</thead>
-							<tbody>
-							</tbody>
-						</table>
-					</div>
-					<div class="border border-top-0 mb-2 tab-pane" id="compiler-variables" role="tabpanel">
-						<table class="table" id="compiler-variables-table">
-							<thead>
-								<tr>
-									<th scope="col">#</th>
-									<th scope="col">Адрес</th>
-									<th scope="col">Тип</th>
-									<th scope="col">Имя</th>
-									<th scope="col">Значение int</th>
-									<th scope="col">Значение float</th>
-								</tr>
-							</thead>
-							<tbody>
-							</tbody>
-						</table>
-					</div>
-					<div class="border border-top-0 mb-2 tab-pane" id="compiler-instructions" role="tabpanel">
-						<table class="table" id="compiler-instructions-table">
-							<thead>
-								<tr>
-									<th scope="col">#</th>
-									<th scope="col">Тип</th>
-									<th scope="col">Объект записи</th>
-									<th scope="col">Операнд 1</th>
-									<th scope="col">Оператор</th>
-									<th scope="col">Операнд 2</th>
-									<th scope="col">Глубина</th>
-								</tr>
-							</thead>
-							<tbody>
-							</tbody>
-						</table>
+				</div>
+				<div class="col">
+					<div class="row">
+						<h5 id="compiler-message-box">Компиляция не выполнялась</h5>
+						<div>Ошибок - <span id="compiler-errors-number">0</span></div>
+						<div>Токенов - <span id="compiler-tokens-number">0</span></div>
+						<div>Переменных - <span id="compiler-variables-number">0</span></div>
+						<div>Инструкций - <span id="compiler-instructions-number">0</span></div>
 					</div>
 				</div>
 			</div>
-			<div class="col">
-				<div id="compiler-message-box">Компиляция не начата</div>
-				<div>Ошибок - <span id="compiler-errors-number">0</span></div>
-				<div>Токенов - <span id="compiler-tokens-number">0</span></div>
-				<div>Переменных - <span id="compiler-variables-number">0</span></div>
-				<div>Инструкций - <span id="compiler-instructions-number">0</span></div>
+
+			<div class="row mt-2">
+				<div class="col">
+					<ul class="nav nav-tabs" id="compilerTabs" role="tablist">
+						<li class="nav-item" role="presentation">
+							<button class="nav-link active" id="compiler-errors-tab" data-bs-toggle="tab" data-bs-target="#compiler-errors" type="button" role="tab">Ошибки</button>
+						</li>
+						<li class="nav-item" role="presentation">
+							<button class="nav-link" id="compiler-tokens-tab" data-bs-toggle="tab" data-bs-target="#compiler-tokens" type="button" role="tab" >Токены</button>
+						</li>
+						<li class="nav-item" role="presentation">
+							<button class="nav-link" id="compiler-variables-tab" data-bs-toggle="tab" data-bs-target="#compiler-variables" type="button" role="tab">Переменные</button>
+						</li>
+						<li class="nav-item" role="presentation">
+							<button class="nav-link" id="compiler-instructions-tab" data-bs-toggle="tab" data-bs-target="#compiler-instructions" type="button" role="tab">Инструкции</button>
+						</li>
+					</ul>
+	
+					<div class="tab-content" id="compilerTabsContent">
+						<div class="border border-top-0 mb-2 tab-pane show active table-box" id="compiler-errors" role="tabpanel">
+							<table class="table" id="compiler-errors-table">
+								<thead>
+									<tr>
+										<th scope="col">#</th>
+										<th scope="col">Строка</th>
+										<th scope="col">Токен</th>
+										<th scope="col">Ошибка</th>
+									</tr>
+								</thead>
+								<tbody>
+								</tbody>
+							</table>
+						</div>
+						<div class="border border-top-0 mb-2 tab-pane table-box" id="compiler-tokens" role="tabpanel">
+							<table class="table" id="compiler-tokens-table">
+								<thead>
+									<tr>
+										<th scope="col">#</th>
+										<th scope="col">Строка</th>
+										<th scope="col">Тип токена</th>
+										<th scope="col">Значение</th>
+									</tr>
+								</thead>
+								<tbody>
+								</tbody>
+							</table>
+						</div>
+						<div class="border border-top-0 mb-2 tab-pane table-box" id="compiler-variables" role="tabpanel">
+							<table class="table" id="compiler-variables-table">
+								<thead>
+									<tr>
+										<th scope="col">#</th>
+										<th scope="col">Адрес</th>
+										<th scope="col">Тип</th>
+										<th scope="col">Имя</th>
+										<th scope="col">Значение int</th>
+										<th scope="col">Значение float</th>
+									</tr>
+								</thead>
+								<tbody>
+								</tbody>
+							</table>
+						</div>
+						<div class="border border-top-0 mb-2 tab-pane table-box" id="compiler-instructions" role="tabpanel">
+							<table class="table" id="compiler-instructions-table">
+								<thead>
+									<tr>
+										<th scope="col">#</th>
+										<th scope="col">Тип</th>
+										<th scope="col">Объект записи</th>
+										<th scope="col">Операнд 1</th>
+										<th scope="col">Оператор</th>
+										<th scope="col">Операнд 2</th>
+										<th scope="col">Глубина</th>
+									</tr>
+								</thead>
+								<tbody>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 
