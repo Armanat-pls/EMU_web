@@ -1,4 +1,4 @@
-package emulator.compiler;
+package emulator.compiler.core;
 
 import java.util.ArrayList;
 import java.util.BitSet;
@@ -8,18 +8,16 @@ import static emulator.CMS.*;
 import emulator.compiler.parts.*;
 import static emulator.compiler.parts.compilerUtils.*;
 import static emulator.EMU.*;
-import java.io.IOException;
 
 public class Translator{
-	private ArrayList<String> errors;
 	private ArrayList<BlockHead> blocks;
 	private int MEMcount;
 	private BitSet[] BitSets;
 	private boolean checkIf;
+	private Infoblock ib;
 
-	Translator(){
+	public Translator(){
 		blocks = new ArrayList<BlockHead>();
-		errors = new ArrayList<String>();
 		MEMcount = 0;
 		BitSets = new BitSet[MEM];
 		checkIf = false;
@@ -44,23 +42,23 @@ public class Translator{
 	private boolean MEMcntUP(){
 		if (++MEMcount < MEM) return true;
 		else{
-			errors.add("Memory overload");
+			ib.setCompileError("Memory overload");
 			return false;
 		}
 	}
-	public ArrayList<String> Compile(Infoblock ib){
-
+	public Infoblock Compile(Infoblock ib_o){
+		this.ib = ib_o;
 		if (ib.variablesList.size() + ib.instructionsList.size() >= MEM + 1){
-			errors.add("Memory overload. varCount: " + ib.variablesList.size() + ", instrCount: " + ib.instructionsList.size());
-			return errors;
+			ib.setCompileError("Memory overload. varCount: " + ib.variablesList.size() + ", instrCount: " + ib.instructionsList.size());
+			return ib;
 		}
 		else if(ib.instructionsList.size() >= MEM + 1){
-			errors.add("Memory overload. instrCount: " + ib.instructionsList.size());
-			return errors;
+			ib.setCompileError("Memory overload. instrCount: " + ib.instructionsList.size());
+			return ib;
 		}
 		else if(ib.variablesList.size() >= MEM + 1){
-			errors.add("Memory overload. varCount: " + ib.variablesList.size());
-			return errors;
+			ib.setCompileError("Memory overload. varCount: " + ib.variablesList.size());
+			return ib;
 		}
 		
 		//заполнение данных
@@ -70,14 +68,14 @@ public class Translator{
 				BitSets[MEMcount] = int_to_bit(var.intVal);
 			else if (var.type == VarTypes.floatE)
 				BitSets[MEMcount] = float_to_bit(var.floatVal);
-			else errors.add("Type NULL, shouldn't be impossible");
+			else ib.setCompileError("Type NULL, shouldn't be impossible");
 		}
-		if (!MEMcntUP()) return errors;
+		if (!MEMcntUP()) return ib;
 		BitSets[0] = make_one( CMSmap.get("JUMP"), MEMcount);
 
 		for (INSTRUCTION instr : ib.instructionsList) {
 			if (MEMcount >= MEM){
-				errors.add("Memory overload");
+				ib.setCompileError("Memory overload");
 				break;
 			}
 			if (checkIf && instr.type != InstrType.elseblock){
@@ -165,16 +163,8 @@ public class Translator{
 				break;
 			}
 		}
-		if (errors.size() == 0){
-			try{
-				for (int i = 0; i < MEM; i++)
-					ib.writer.write(bit_to_string(BitSets[i]) + "\n");
-				ib.writer.close();
-			}
-			catch(IOException e){
-				System.out.println(e);
-			}
-		}
-		return errors;
+		if (!ib.isCompileError())
+			ib.memoryTable = BitSets;
+		return ib;
 	}
 }

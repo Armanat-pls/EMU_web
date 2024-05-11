@@ -2,10 +2,15 @@ package emulator;
 
 import static emulator.EMU.*;
 
+import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.BitSet;
 
 import static emulator.core.Config.*;
+
+import emulator.compiler.Compiler;
+import emulator.compiler.parts.Infoblock;
+import emulator.compiler.parts.compilerUtils;
 import emulator.dataContainer.emuMEMcellContainer;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -207,6 +212,57 @@ public class EmulatorInterface {
 			if (i != MEM - 1) dump += "\n";
 		}
 		return dump;
+	}
+
+	public String callCompiler(BufferedReader bufferedReader){
+		String message = "Компиляция успешна";
+		String s = "{";
+		EMU emu = getEMU();
+		Compiler compiler = new Compiler(bufferedReader);
+		Infoblock ib = compiler.compile();
+
+		if (ib.errorrsList.size() != 0) message = "При компиляции возникли ошибки";
+
+		s += makeJSONentry("тест", ib.errorrsList.size(), false);
+/*
+		if((ib.errorrsList.size() == 0)&&(!ib.isCompileError())){
+			for (int i = 0; i < ib.memoryTable.length; i++) {
+				emu.RAM.write_cell(i, ib.memoryTable[i]);
+			}
+			setEMU(emu);
+		}
+*/
+
+		if (ib.isCompileError()) message = ib.getCompileError();
+		s += makeJSONentry("message", message, false);
+		s += makeJSONentry("CANT", emu.UU.CANT, false);
+		emuMEMcellContainer RO = new emuMEMcellContainer(emu.ALU.get_RO());
+		s += "\"RO\": " +  memCellToJSON(RO, 0, true) + ",";
+		s += "\"RAM\": [";
+		for (int i = 0; i < MEM; i++){
+			emuMEMcellContainer cell = new emuMEMcellContainer(emu.RAM.get_cell(i));
+			s += memCellToJSON(cell, i, false);
+			if (i < MEM - 1) s += ",";
+		}
+		s += "],";
+
+		s += "\"ERORRS\": ";
+		s += compilerUtils.printErrors(ib.errorrsList);
+		s += ",";
+
+		s += "\"TOKENS\": ";
+		s += compilerUtils.printTokens(ib.TableOfTokens);
+		s += ",";
+
+		s += "\"VARIABLES\": ";
+		s += compilerUtils.printVariables(ib.variablesList);
+		s += ",";
+
+		s += "\"INSTRUCTIONS\": ";
+		s += compilerUtils.printInstructions(ib.instructionsList);
+
+		s += "}";
+		return s;
 	}
 
 	public static String makeJSONentry(String key, int value, boolean last){

@@ -11,11 +11,18 @@ public class TOKEN{
 		this.value = value;
 		this.codeLine = codeLine;
 	}
-	public String toString(){
+
+	public String toJSONentry(){
 		String num = "";
 		if (codeLine < 10) num = "00" + codeLine;
 		else if (codeLine < 100) num = "0" + codeLine;
 		else if (codeLine < 1000) num = "" + codeLine;
-		return num + "| " + tokenType + " : " + value + "\n"; 
+
+		String s = "{";
+		s += "\"codeLine\":\""+num+"\",";
+		s += "\"tokenType\":\""+tokenType+"\",";
+		s += "\"value\":\""+value+"\"";
+		s += "}";
+		return s;
 	}
 }

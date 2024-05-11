@@ -1,4 +1,4 @@
-package emulator.compiler;
+package emulator.compiler.core;
 
 import java.io.*;
 import emulator.compiler.parts.*;
@@ -41,7 +41,7 @@ public class Lexer{
 	ReadingWhat state;
 	int codeLine;
 
-	Lexer(){
+	public Lexer(){
 		ib = new Infoblock();
 		state = ReadingWhat.nothing;
 		codeLine = 1;

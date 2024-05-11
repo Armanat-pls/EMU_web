@@ -13,14 +13,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 
 import emulator.EmulatorInterface;
-
-import static emulator.EMU.int_to_bit;
-import static emulator.core.Config.MEM;
-import static emulator.EMU.*;
-
 
 @WebServlet(name = "api.compilerExec", urlPatterns = "/compilerExec")
 @MultipartConfig(
@@ -39,6 +33,12 @@ public class compilerExec extends HttpServlet {
 		this.response=res;
 		this.api = new EmulatorInterface(request);
 		String json = "";
+
+		Part part = request.getParts().iterator().next();
+		InputStream partStream = part.getInputStream();
+		BufferedReader part_reader = new BufferedReader(new InputStreamReader(partStream));
+
+		json = api.callCompiler(part_reader);
 
 		response.setContentType("application/json");
 		PrintWriter printWriter = response.getWriter();

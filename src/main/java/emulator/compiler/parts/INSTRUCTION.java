@@ -22,14 +22,16 @@ public class INSTRUCTION{
 		this.type = type;
 		this.blockDeep = blockDeep;
 	}
-	public String toString(){
-		String log = "";
-		log += type.toString() + "  |  ";
-		log += writeTo + "  |  ";
-		log += operand1 + " ";
-		log += operator  + " ";
-		log += operand2 + "  |  ";
-		log += blockDeep;
-		return log;
+
+	public String toJSONentry(){
+		String s = "{";
+		s += "\"type\":\""+type.toString()+"\",";
+		s += "\"writeTo\":\""+writeTo+"\",";
+		s += "\"operand1\":\""+operand1+"\",";
+		s += "\"operator\":\""+operator+"\",";
+		s += "\"operand2\":\""+operand2+"\",";
+		s += "\"blockDeep\":\""+blockDeep+"\"";
+		s += "}";
+		return s;
 	}
 }

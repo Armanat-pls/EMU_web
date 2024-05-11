@@ -28,15 +28,20 @@ public class VARIABLE{
 		this.name = name;
 		this.address = addrCount;
 	}
-	public String toString(){
-		String res = "";
-		if (address < 10) res = "     00" + this.address + " | ";
-		else if (address < 100) res = "     0" + this.address + " | ";
-		else if (address < 1000) res = "     " + this.address + " | ";
-		res += this.name + " |    ";
-		res += this.type + " |    ";
-		res += this.intVal + " | ";
-		res += this.floatVal + " | ";
-		return res;
+
+	public String toJSONentry(){
+		String num = "";
+		if (address < 10) num = "00" + address;
+		else if (address < 100) num = "0" + address;
+		else if (address < 1000) num = "" + address;
+
+		String s = "{";
+		s += "\"address\":\""+num+"\",";
+		s += "\"name\":\""+name+"\",";
+		s += "\"type\":\""+type+"\",";
+		s += "\"intVal\":\""+intVal+"\",";
+		s += "\"floatVal\":\""+floatVal+"\"";
+		s += "}";
+		return s;
 	}
 }

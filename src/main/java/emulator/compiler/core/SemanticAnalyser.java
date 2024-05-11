@@ -1,4 +1,4 @@
-package emulator.compiler;
+package emulator.compiler.core;
 
 import java.util.ArrayList;
 import emulator.compiler.parts.*;
@@ -22,7 +22,7 @@ public class SemanticAnalyser{
 	private int i;
 	private String ErrorBuffer;
 
-	SemanticAnalyser(){
+	public SemanticAnalyser(){
 		addrCount = 0;
 		lasTokenType = TokenType.EoI;
 		curTokenType = TokenType.EoI;

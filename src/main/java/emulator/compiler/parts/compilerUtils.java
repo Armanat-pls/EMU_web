@@ -4,37 +4,41 @@ import java.util.ArrayList;
 
 public class compilerUtils{
 
-	compilerUtils(){};
-
-	public ArrayList<String> printTokens(ArrayList<TOKEN> TableOfTokens){
-		ArrayList<String> tokens = new ArrayList<String>();
+	public static String printTokens(ArrayList<TOKEN> TableOfTokens){
+		String s = "";
 		for (TOKEN token : TableOfTokens) {
-			tokens.add(token.toString());
+			s += token.toJSONentry();
+			s += ",";
 		}
-		return tokens;
+		if (TableOfTokens.size() == 0) return "\"\"";
+		return "[" + s.substring(0, s.length() - 1) + "]";
 	}
-	public ArrayList<String> printErrors(ArrayList<LexicError> LexicErrors){
-		ArrayList<String> errors = new ArrayList<String>();
-		if (LexicErrors.size() > 0){
-			for (LexicError error : LexicErrors) {
-				errors.add(error.toString());
-			}
+	public static String printErrors(ArrayList<LexicError> LexicErrors){
+		String s = "";
+		for (LexicError lexicError : LexicErrors) {
+			s += lexicError.toJSONentry();
+			s += ",";
 		}
-		return errors;
+		if (LexicErrors.size() == 0) return "\"\"";
+		return "[" + s.substring(0, s.length() - 1) + "]";
 	}
-	public ArrayList<String> printVariables(ArrayList<VARIABLE> VariablesList){
-		ArrayList<String> variables = new ArrayList<String>();
-		for (VARIABLE var : VariablesList) {
-			variables.add(var.toString());
+	public static String printVariables(ArrayList<VARIABLE> VariablesList){
+		String s = "";
+		for (VARIABLE variable : VariablesList) {
+			s += variable.toJSONentry();
+			s += ",";
 		}
-		return variables;
+		if (VariablesList.size() == 0) return "\"\"";
+		return "[" + s.substring(0, s.length() - 1) + "]";
 	}
-	public ArrayList<String> printInstructions(ArrayList<INSTRUCTION> InstructionsList){
-		ArrayList<String> instructions = new ArrayList<String>();
+	public static String printInstructions(ArrayList<INSTRUCTION> InstructionsList){
+		String s = "";
 		for (INSTRUCTION instruction : InstructionsList) {
-			instructions.add(instruction.toString());
+			s += instruction.toJSONentry();
+			s += ",";
 		}
-		return instructions;
+		if (InstructionsList.size() == 0) return "\"\"";
+		return "[" + s.substring(0, s.length() - 1) + "]";
 	}
 
 	public static VARIABLE getVarbyName(Infoblock ib, String name){

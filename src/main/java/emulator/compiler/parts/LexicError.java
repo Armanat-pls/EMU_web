@@ -8,10 +8,13 @@ public class LexicError{
 		this.token = token;
 		this.error = error;
 	}
-	public String toString(){
-		String log = "";
-		log += token.toString() + "     |    ";
-		log += "Error: " + error;
-		return log;
+
+	public String toJSONentry(){
+		String s = "{";
+		s += "\"codeLine\":\""+token.codeLine+"\",";
+		s += "\"token\":\""+token.tokenType + " : " + token.value +"\",";
+		s += "\"error\":\""+error+"\"";
+		s += "}";
+		return s;
 	}
 }
