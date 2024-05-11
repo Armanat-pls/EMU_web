@@ -428,3 +428,29 @@ function sendRAMfile(){
 function onclick_RAM_dump(){
 	location.href="/EMU/FileRAMget";
 }
+
+function sendCompilerFile(){
+	let formData = new FormData();
+	formData.append('file', $("#compiler_source_file")[0].files[0]);
+	$.ajax({
+		url: '/EMU/compilerExec',
+		type: "POST",
+		cache: false,
+		contentType: false,
+		processData: false,
+		data: formData,
+		success: function(data){
+			/*
+			window["STATE"].CANT = data.CANT;
+			window["STATE"].ALU = data.RO;
+			window["STATE"].RAM = data.RAM;
+			*/
+			console.log(data);
+			if (data.message !== "") alert(data.message);
+			window["callRefresh"]();
+		},
+		error: function(error){
+			handleAJAXError(error);
+		}
+	});
+}

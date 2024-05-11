@@ -192,6 +192,123 @@
 				</div>
 			</div>
 		</div>
+
+		<div class="row mt-4 mb-3 border">
+			<h4>Компилятор</h4>
+			<div>
+				<label for="input_ram_file" class="form-label">Загрузить исходный код и скомпилировать программу</label>
+				<input class="form-control bit_out" type="file" id="compiler_source_file" onchange="sendCompilerFile()">
+			</div>
+
+			<div class="col-lg-9">
+
+				<ul class="nav nav-tabs mt-2" id="compilerTabs" role="tablist">
+					<li class="nav-item" role="presentation">
+						<button class="nav-link active" id="compiler-errors-tab" data-bs-toggle="tab" data-bs-target="#compiler-errors" type="button" role="tab">Ошибки</button>
+					</li>
+					<li class="nav-item" role="presentation">
+						<button class="nav-link" id="compiler-tokens-tab" data-bs-toggle="tab" data-bs-target="#compiler-tokens" type="button" role="tab" >Токены</button>
+					</li>
+					<li class="nav-item" role="presentation">
+						<button class="nav-link" id="compiler-variables-tab" data-bs-toggle="tab" data-bs-target="#compiler-variables" type="button" role="tab">Переменные</button>
+					</li>
+					<li class="nav-item" role="presentation">
+						<button class="nav-link" id="compiler-instructions-tab" data-bs-toggle="tab" data-bs-target="#compiler-instructions" type="button" role="tab">Инструкции</button>
+					</li>
+				</ul>
+
+				<div class="tab-content" id="compilerTabsContent">
+					<div class="border border-top-0 mb-2 tab-pane show active" id="compiler-errors" role="tabpanel">
+						<table class="table" id="compiler-errors-table">
+							<thead>
+								<tr>
+									<th scope="col">#</th>
+									<th scope="col">Строка</th>
+									<th scope="col">Токен</th>
+									<th scope="col">Ошибка</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row">1</th>
+									<td>027</td>
+									<td>type:int</td>
+									<td>Error: Unexpected place for type</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="border border-top-0 mb-2 tab-pane" id="compiler-tokens" role="tabpanel">
+						<table class="table" id="compiler-tokens-table">
+							<thead>
+								<tr>
+									<th scope="col">#</th>
+									<th scope="col">Токен</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row">1</th>
+									<td>type : int</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="border border-top-0 mb-2 tab-pane" id="compiler-variables" role="tabpanel">
+						<table class="table" id="compiler-variables-table">
+							<thead>
+								<tr>
+									<th scope="col">#</th>
+									<th scope="col">Адрес</th>
+									<th scope="col">Тип</th>
+									<th scope="col">Значение int</th>
+									<th scope="col">Значение float</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row">1</th>
+									<td>001</td>
+									<td>intE</td>
+									<td>0</td>
+									<td>0.0</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="border border-top-0 mb-2 tab-pane" id="compiler-instructions" role="tabpanel">
+						<table class="table" id="compiler-instructions-table">
+							<thead>
+								<tr>
+									<th scope="col">#</th>
+									<th scope="col">Тип</th>
+									<th scope="col">Объект записи</th>
+									<th scope="col">Операция</th>
+									<th scope="col">Глубина</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row">1</th>
+									<td>whileblock</td>
+									<td>null</td>
+									<td>x<=10</td>
+									<td>0</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="col">
+				<div>Компиляция не начата</div>
+				<div>Ошибок - 0</div>
+				<div>Токенов - 5</div>
+				<div>Переменных - 12</div>
+				<div>Инструкций - 15</div>
+			</div>
+		</div>
+
 	</div>
 </body>
 </html>
