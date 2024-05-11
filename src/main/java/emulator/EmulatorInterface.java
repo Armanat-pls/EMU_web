@@ -142,6 +142,7 @@ public class EmulatorInterface {
 		EMU emu = getEMU();
 		emu.RAM.zero();
 		emu.ALU.clearRO();
+		emu.UU.CANT = 0;
 		setEMU(emu);
 		return getMemAll("Память очищена");
 	}
