@@ -7,7 +7,9 @@
 	<title>Учебный эмулятор ЭВМ</title>
 
 	<link rel="stylesheet" href="css/styles.css">
+	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<script type="text/javascript" src="js/script.js"></script>
+	<script type="text/javascript" src="js/bootstrap.bundle.min.js"></script>
 	<script type="text/javascript" src="js/jQuery_3.7.1.js"></script>
 </head>
 <body>
