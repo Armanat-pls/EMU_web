@@ -1,3 +1,4 @@
+// Оставь надежду всяк сюда входящий
 window.onload = async function(){
 	await initiateMain();
 
