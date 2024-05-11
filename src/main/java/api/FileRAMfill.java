@@ -44,11 +44,11 @@ public class FileRAMfill extends HttpServlet {
 		String json = "";
 		boolean fail = false;
 		ArrayList<String> lines = new ArrayList<String>();
-		for (Part part : request.getParts()){
-			InputStream partStream = part.getInputStream();
-			BufferedReader part_reader = new BufferedReader(new InputStreamReader(partStream));
-			String line = part_reader.readLine();
-			if (!upLineCNT()) break;
+		Part part = request.getParts().iterator().next();
+		InputStream partStream = part.getInputStream();
+		BufferedReader part_reader = new BufferedReader(new InputStreamReader(partStream));
+		String line = part_reader.readLine();
+		if (upLineCNT()){
 			while (line != null){
 				if (!isValidLine(line)){
 					ignoredCNT++;
@@ -57,7 +57,8 @@ public class FileRAMfill extends HttpServlet {
 				lines.add(line);
 				line = part_reader.readLine();
 			}
-		}
+		};
+
 		if (!fail) json = api.fillRAMfromFile(lines, ignoredCNT);
 		response.setContentType("application/json");
 		PrintWriter printWriter = response.getWriter();
