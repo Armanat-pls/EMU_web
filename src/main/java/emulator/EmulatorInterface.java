@@ -215,7 +215,7 @@ public class EmulatorInterface {
 	}
 
 	public String callCompiler(BufferedReader bufferedReader){
-		String message = "Компиляция успешна";
+		String message = "Компиляция успешна. Программа загружена в память";
 		String s = "{";
 		EMU emu = getEMU();
 		Compiler compiler = new Compiler(bufferedReader);
@@ -224,6 +224,9 @@ public class EmulatorInterface {
 		if (ib.errorrsList.size() != 0) message = "При компиляции возникли ошибки";
  
 		if((ib.errorrsList.size() == 0)&&(!ib.isCompileError())){
+			emu.RAM.zero();
+			emu.ALU.clearRO();
+			emu.UU.CANT = 0;
 			for (int i = 0; i < ib.memoryTable.length; i++) {
 				BitSet cell = ib.memoryTable[i];
 				if (cell == null) cell = int_to_bit(0);
