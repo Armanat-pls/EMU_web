@@ -190,6 +190,11 @@
 						</div>
 					</div>
 				</div>
+				<div class="mt-2">
+					<button class="btn btn-primary">
+						<a href="/EMU/help.jsp" target="_blank" class="link-light">Помощь</a>
+					</button>
+				</div>
 			</div>
 		</div>
 
