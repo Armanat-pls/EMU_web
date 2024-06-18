@@ -221,7 +221,7 @@ public class EMU{
 	}
 
 
-	protected int compute(){
+	public int compute(){
 		BitSet[] coms = new BitSet[2];
 		int C;
 		int A;
